@@ -7,7 +7,6 @@ import processing.core.PApplet;
 import java.lang.invoke.MethodHandles;
 
 public class A1Core extends PApplet {
-    int Size = 500;
 
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());
@@ -18,7 +17,8 @@ public class A1Core extends PApplet {
     }
 
     public void settings() {
-        size(Size+50, Size);
+        int size = 500;
+        size(size +50, size);
     }
 
     public void draw() {

@@ -3,13 +3,13 @@ import processing.core.PApplet;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Created by sdmsi on 15/07/2016.
+ * Created by Shaun on 15/07/2016.
  */
 public class A1CompC extends PApplet {
-    int Size = 500;
-    int x=0;
-    int num=500;
-    int dif=70;
+    private int Size = 500;
+    private int x=0;
+    private int num=500;
+    private int dif=70;
 
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());

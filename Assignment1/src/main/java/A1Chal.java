@@ -3,18 +3,16 @@ import processing.core.PApplet;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Created by sdmsi on 17/07/2016.
+ * Created by Shaun on 17/07/2016.
  */
 public class A1Chal extends PApplet {
-    int Size = 500;
-    int Diam = 20;
-    float x = 20;
-    float y = 20;
-    float xVec = 2;
-    float yVec = 2;
-    int red = 140, green = 0, blue = 140;
-    boolean upNotSide = true;
-    double grav = 0.1;
+    private float x = 20;
+    private float y = 20;
+    private float xVec = 2;
+    private float yVec = 2;
+    private int red = 140, green = 0, blue = 140;
+    private boolean upNotSide = true;
+    private double grav = 0.1;
 
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());
@@ -25,14 +23,16 @@ public class A1Chal extends PApplet {
     }
 
     public void settings() {
-        size(Size, Size);
+        int size = 500;
+        size(size, size);
     }
 
     public void draw() {
         println("Try not to hit the edge!!!");
         clear();
         fill(red, green, blue);
-        ellipse(x, y, Diam, Diam);
+        int diam = 20;
+        ellipse(x, y, diam, diam);
         if (xVec < 8 && xVec > -8 && yVec > -8 && yVec < 8) {
             if (upNotSide) {
                 yVec += grav;
@@ -42,21 +42,21 @@ public class A1Chal extends PApplet {
         }
         x += xVec;
         y += yVec;
-        if (y >= height - Diam / 2) {
+        if (y >= height - diam / 2) {
             changeCol();
             yVec -= 2 * yVec;
-        } else if (y <= 0 + Diam / 2) {
+        } else if (y <= diam / 2) {
             yVec -= 2 * yVec;
             changeCol();
         }
-        if (x >= width - Diam / 2) {
+        if (x >= width - diam / 2) {
             xVec -= 2 * xVec;
             changeCol();
-        } else if (x <= 0 + Diam / 2) {
+        } else if (x <= diam / 2) {
             xVec -= 2 * xVec;
             changeCol();
         }
-        if (keyPressed == true) {
+        if (keyPressed) {
             if (key == 's') {
                 upNotSide = true;
                 grav = 0.1;
@@ -74,7 +74,7 @@ public class A1Chal extends PApplet {
     }
 
 
-    public void changeCol() {
+    private void changeCol() {
         red = (int) random(0, 255);
         green = (int) random(0, 255);
         blue = (int) random(0, 255);

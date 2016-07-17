@@ -3,12 +3,10 @@ import processing.core.PApplet;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Created by sdmsi on 15/07/2016.
+ * Created by Shaun on 15/07/2016.
  */
 public class A1CompA extends PApplet {
-    int Size = 500;
-    int rows = 15;
-    int cols = 15;
+
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());
     }
@@ -18,13 +16,16 @@ public class A1CompA extends PApplet {
     }
 
     public void settings() {
-        size(Size , Size);
+        int size = 500;
+        size(size, size);
     }
 
     public void draw() {
+        int cols = 15;
         int spacingx = (width / cols);
-        int spacingy = (height/rows);
-        for (int j=0;j<cols;j++) {
+        int rows = 15;
+        int spacingy = (height/ rows);
+        for (int j = 0; j< cols; j++) {
             for (int i = 0; i < rows; i++) {
                 rect(spacingx * i, spacingy*j,spacingx-2,spacingy-2);
             }
