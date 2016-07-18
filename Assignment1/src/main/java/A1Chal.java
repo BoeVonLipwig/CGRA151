@@ -33,7 +33,7 @@ public class A1Chal extends PApplet {
         fill(red, green, blue);
         int diam = 20;
         ellipse(x, y, diam, diam);
-        if (grav > 0&& xVec < 8 && xVec > -8 || grav < 0 && yVec > -8 && yVec < 8) {
+        if (grav > 0 && xVec < 8 && xVec > -8 || grav < 0 && yVec > -8 && yVec < 8) {
             if (upNotSide) {
                 yVec += grav;
             } else {
@@ -57,21 +57,16 @@ public class A1Chal extends PApplet {
             changeCol();
         }
         if (keyPressed) {
-            println("fucking what");
-            if (key == 'S') {
-                println("S");
+            if (key == 's') {
                 upNotSide = true;
                 grav = 0.1;
-            } else if (key == 'W') {
-                println("W");
+            } else if (key == 'w') {
                 upNotSide = true;
                 grav = -0.1;
-            } else if (key == 'A') {
-                println("A");
+            } else if (key == 'a') {
                 upNotSide = false;
                 grav = -0.1;
-            } else if (key == 'D') {
-                println("D");
+            } else if (key == 'd') {
                 upNotSide = false;
                 grav = 0.1;
             }
