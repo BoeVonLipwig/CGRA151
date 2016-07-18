@@ -24,16 +24,16 @@ public class A1Chal extends PApplet {
 
     public void settings() {
         int size = 500;
+        println("Try not to hit the edge!!!");
         size(size, size);
     }
 
     public void draw() {
-        println("Try not to hit the edge!!!");
         clear();
         fill(red, green, blue);
         int diam = 20;
         ellipse(x, y, diam, diam);
-        if (xVec < 8 && xVec > -8 && yVec > -8 && yVec < 8) {
+        if (grav > 0&& xVec < 8 && xVec > -8 || grav < 0 && yVec > -8 && yVec < 8) {
             if (upNotSide) {
                 yVec += grav;
             } else {
@@ -57,16 +57,21 @@ public class A1Chal extends PApplet {
             changeCol();
         }
         if (keyPressed) {
-            if (key == 's') {
+            println("fucking what");
+            if (key == 'S') {
+                println("S");
                 upNotSide = true;
                 grav = 0.1;
-            } else if (key == 'w') {
+            } else if (key == 'W') {
+                println("W");
                 upNotSide = true;
                 grav = -0.1;
-            } else if (key == 'a') {
+            } else if (key == 'A') {
+                println("A");
                 upNotSide = false;
                 grav = -0.1;
-            } else if (key == 'd') {
+            } else if (key == 'D') {
+                println("D");
                 upNotSide = false;
                 grav = 0.1;
             }
@@ -74,7 +79,7 @@ public class A1Chal extends PApplet {
     }
 
 
-    private void changeCol() {
+    public void changeCol() {
         red = (int) random(0, 255);
         green = (int) random(0, 255);
         blue = (int) random(0, 255);
