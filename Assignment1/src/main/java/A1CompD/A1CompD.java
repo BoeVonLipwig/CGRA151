@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import java.lang.invoke.MethodHandles;
 
 /**
- * Created by Shaun on 17/07/2016.
+ * Started by Shaun on 17/07/2016.
  */
 public class A1CompD extends PApplet {
 

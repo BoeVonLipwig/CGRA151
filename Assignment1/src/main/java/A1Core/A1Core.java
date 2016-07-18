@@ -1,10 +1,12 @@
-package A1Core; /**
- * Created by Shaun on 15/07/2016.
- */
+package A1Core;
 
 import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;
+
+/**
+ * Started by Shaun on 15/07/2016.
+ */
 
 public class A1Core extends PApplet {
 
