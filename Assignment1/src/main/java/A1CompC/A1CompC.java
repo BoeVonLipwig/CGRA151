@@ -13,9 +13,7 @@ public class A1CompC extends PApplet {
         main(MethodHandles.lookup().lookupClass().getName());
     }
 
-    private int Size = 500;
     private int x=0;
-    private int num=500;
     private int dif=70;
 
     public void setup() {
@@ -23,12 +21,14 @@ public class A1CompC extends PApplet {
     }
 
     public void settings() {
-        size(Size+dif, Size);
+        int size = 500;
+        size(size +dif, size);
     }
 
     public void draw() {
         float x1, x2,x3, y1, y2, y3;
-        while (x<num){
+        int num = 500;
+        while (x< num){
             x1=random(0,width);
             y1=random(0,height);
             x2=x1+(random(-dif,dif));

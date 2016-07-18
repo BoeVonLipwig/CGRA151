@@ -20,7 +20,6 @@ public class A1Chal extends PApplet {
     private int red = 140, green = 0, blue = 140;
     private boolean upNotSide = true;
     private double grav = 0.1;
-    int lim = 6;
 
     public void setup() {
         background(0);
@@ -37,6 +36,7 @@ public class A1Chal extends PApplet {
         fill(red, green, blue);
         int diam = 20;
         ellipse(x, y, diam, diam);
+        int lim = 6;
         if (grav > 0 && xVec < lim && xVec > -lim || grav < 0 && yVec > -lim && yVec < lim) {
             if (upNotSide) {
                 yVec += grav;
@@ -78,7 +78,7 @@ public class A1Chal extends PApplet {
     }
 
 
-    public void changeCol() {
+    private void changeCol() {
         red = (int) random(0, 255);
         green = (int) random(0, 255);
         blue = (int) random(0, 255);
