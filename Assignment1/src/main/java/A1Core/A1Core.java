@@ -1,4 +1,4 @@
-/**
+package A1Core; /**
  * Created by Shaun on 15/07/2016.
  */
 

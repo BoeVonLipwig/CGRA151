@@ -1,3 +1,5 @@
+package A1CompA;
+
 import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;

@@ -1,3 +1,5 @@
+package A1Chal;
+
 import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;
@@ -6,6 +8,11 @@ import java.lang.invoke.MethodHandles;
  * Created by Shaun on 17/07/2016.
  */
 public class A1Chal extends PApplet {
+
+    public static void main(String[] args) {
+        main(MethodHandles.lookup().lookupClass().getName());
+    }
+
     private float x = 20;
     private float y = 20;
     private float xVec = 2;
@@ -13,10 +20,7 @@ public class A1Chal extends PApplet {
     private int red = 140, green = 0, blue = 140;
     private boolean upNotSide = true;
     private double grav = 0.1;
-
-    public static void main(String[] args) {
-        main(MethodHandles.lookup().lookupClass().getName());
-    }
+    int lim = 6;
 
     public void setup() {
         background(0);
@@ -33,7 +37,7 @@ public class A1Chal extends PApplet {
         fill(red, green, blue);
         int diam = 20;
         ellipse(x, y, diam, diam);
-        if (grav > 0 && xVec < 8 && xVec > -8 || grav < 0 && yVec > -8 && yVec < 8) {
+        if (grav > 0 && xVec < lim && xVec > -lim || grav < 0 && yVec > -lim && yVec < lim) {
             if (upNotSide) {
                 yVec += grav;
             } else {

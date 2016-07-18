@@ -1,3 +1,5 @@
+package A1CompC;
+
 import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;
@@ -6,14 +8,15 @@ import java.lang.invoke.MethodHandles;
  * Created by Shaun on 15/07/2016.
  */
 public class A1CompC extends PApplet {
-    private int Size = 500;
-    private int x=0;
-    private int num=500;
-    private int dif=70;
 
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());
     }
+
+    private int Size = 500;
+    private int x=0;
+    private int num=500;
+    private int dif=70;
 
     public void setup() {
         background(140);

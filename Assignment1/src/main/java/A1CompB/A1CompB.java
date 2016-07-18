@@ -1,16 +1,19 @@
+package A1CompB;
+
 import processing.core.PApplet;
 
 import java.lang.invoke.MethodHandles;
 
 /**
- * Created by sdmsi on 15/07/2016.
+ * Created by Shaun on 15/07/2016.
  */
 public class A1CompB extends PApplet {
-    private float count = 0;
 
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());
     }
+
+    private float count = 0;
 
     public void setup() {
         background(140);
