@@ -23,10 +23,13 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="Assignment1" />
+        <module name="Assignment2" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="Assignment 2" target="1.8" />
       <module name="Assignment1" target="1.8" />
+      <module name="Assignment2" target="1.8" />
       <module name="CGRA151" target="1.8" />
     </bytecodeTargetLevel>
   </component>
