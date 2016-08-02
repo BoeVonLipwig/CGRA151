@@ -10,15 +10,14 @@ import java.util.ArrayList;
 
 public class A2Core extends PApplet {
 
-    public A2Core() {
-    }
+
 
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());
     }
 
     private float xVec = 6;
-    private float yVec = 0;
+    private float yVec = 6;
     private float ballY = height / 2;
     private float ballX = width / 2;
     private boolean mouseKey = true;
@@ -26,8 +25,7 @@ public class A2Core extends PApplet {
     private float batY = width / 2;
     private float batWid = 100;
     private float batHei = 20;
-
-    PVector velocity = new PVector(xVec, yVec);
+    private PVector velocity = new PVector(xVec, yVec);
     private ArrayList<Block> blocks = new ArrayList();
 
     public void setup() {
@@ -56,11 +54,6 @@ public class A2Core extends PApplet {
         int diam = 80;
         int raduis = diam / 2;
         ellipse(ballX - velocity.x, ballY - velocity.y, diam - 2, diam - 2);
-        int lim = 6;
-        float gravVal = 0.1f;
-        if (velocity.y < lim) {
-            velocity.y += gravVal;
-        }
         ballX += velocity.x;
         ballY += velocity.y;
         if (ballY > height - (raduis) || ballY < (raduis)) {
@@ -84,7 +77,40 @@ public class A2Core extends PApplet {
 
             }
         }
-
+        float distX = Math.abs(ballX - (batX - batWid / 2));
+        float distY = Math.abs(ballY - (batY - batHei / 2));
+        float dx = distX - batWid / 2;
+        float dy = distY - batHei / 2;
+        if (distX > (batWid / 2 + raduis)) {
+            return;
+        }
+        if (distY > (batHei / 2 + raduis)) {
+            return;
+        }
+        if (distY <= (batHei / 2)) {
+            velocity.x = -velocity.x;
+            if (ballX + raduis > batX && batX + raduis < batX + batWid) {
+                batX = batX - raduis - 1;
+            } else {
+                batX = batX + batWid + raduis + 1;
+            }
+        }
+        if (distX <= (batWid / 2)) {
+            velocity.y = -velocity.y;
+            if (ballX + raduis < batX + batHei) {
+                ballX = batX - raduis - 1;
+            } else {
+                ballX = batX + batHei + raduis + 1;
+            }
+        }
+        if (dx * dx + dy * dy <= raduis * raduis) {
+            if (ballY + raduis < batY + batHei) {
+                ballY = batY - raduis - 1;
+            } else {
+                ballY = batY + batHei + raduis + 1;
+            }
+            velocity = velocity.mult(-1);
+        }
     }
 
     public void mousePressed() {
@@ -130,90 +156,3 @@ public class A2Core extends PApplet {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    float distX = Math.abs(ballX - batX - batWid / 2);
-//    float distY = Math.abs(ballY - batY - batHei / 2);
-//        if (distY <= (batHei / 2)) {
-//                velocity.x*=-1;
-//                if (ballX + raduis > batX && ballX + raduis < batX + batWid) {
-//        ballX = batX - raduis - 1;
-//        } else {
-//        ballX = batX + batWid + raduis + 1;
-//        }
-//        }
-//        if (distX <= (batWid / 2)) {
-//        velocity.y*=-1;
-//        if (ballY + raduis > batY && ballY + raduis < batY + batHei) {
-//        ballY = batY - raduis - 1;
-//        } else {
-//        ballY = batY + batHei + raduis + 1;
-//        }
-//        }
-//        if (ballY + raduis > batY && ballY + raduis < batY + batHei) {
-//        ballY = batY - raduis - 1;
-//        } else {
-//        ballY = batY + batHei + raduis + 1;
-//        }
-//        if (sq(batX-ballX)+sq(batY-ballY) > sq(raduis) ||
-//        sq((batX+batWid)-ballX)+sq(batY-ballY) > sq(raduis) ||
-//        sq(batX-ballX)+sq((batY+batHei)-ballY) > sq(raduis) ||
-//        sq((batX+batWid)-ballX)+sq((batY+batHei)-ballY) > sq(raduis)) {
-//        velocity.x*=-1;
-//        velocity.y*=-1;
-//        }
-
-//    float distX = Math.abs(ballX - (batX - batWid / 2));
-//    float distY = Math.abs(ballY - (batY - batHei / 2));
-//    float dx = distX - batWid / 2;
-//    float dy = distY - batHei / 2;
-//        if (distY <= (batHei / 2)) {
-//                velocity.x = -velocity.x;
-//                if (ballX + raduis > batX && batX + raduis < batX + batWid) {
-//        batX = batX - raduis - 1;
-//        } else {
-//        batX = batX + batWid + raduis + 1;
-//        }
-//        }
-//        if (distX <= (batWid / 2)) {
-//        velocity.y = -velocity.y;
-//        if (ballY + raduis < batX + batHei) {
-//        ballY = batX - raduis - 1;
-//        } else {
-//        ballY = batX + batHei + raduis + 1;
-//        }
-//        }
-//        if (dx * dx + dy * dy <= raduis * raduis) {
-//        if (ballY + raduis < batX + batHei) {
-//        ballY = batX - raduis - 1;
-//        } else {
-//        ballY = batX + batHei + raduis + 1;
-//        }
-//        velocity = velocity.mult(-1);
-//        }
