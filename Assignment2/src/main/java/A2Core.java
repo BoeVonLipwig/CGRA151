@@ -3,6 +3,7 @@
  */
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
@@ -16,18 +17,26 @@ public class A2Core extends PApplet {
         main(MethodHandles.lookup().lookupClass().getName());
     }
 
-    private float xVec = 6, yVec = 0, ballY = height / 2, ballX = width / 2, gravVal = 0.1f;
+    private float xVec = 6;
+    private float yVec = 0;
+    private float ballY = height / 2;
+    private float ballX = width / 2;
     private boolean mouseKey = true;
-    private float batX = width / 2, batY, batWid = 100, batHei = 20;
-    private int numWide = 8, numHigh = 2;
+    private float batX = width / 2;
+    private float batY = width / 2;
+    private float batWid = 100;
+    private float batHei = 20;
+
+    PVector velocity = new PVector(xVec, yVec);
     private ArrayList<Block> blocks = new ArrayList();
 
     public void setup() {
         rectMode(CENTER);
-        blocks.add(new Block((20), (20), batWid, batHei));
-        for (int i = 1; i < numWide; i++) {
-            for (int j = 1; j < numHigh; j++) {
-                blocks.add(new Block((20 + batWid) * i, (20 + batHei) * j, batWid, batHei));
+        int numWide = 5;
+        int numHigh = 2;
+        for (int i = 0; i < numWide; i++) {
+            for (int j = 0; j < numHigh; j++) {
+                blocks.add(new Block((batWid * i) + batWid, (batHei * j) + 40, batWid, batHei));
             }
         }
     }
@@ -39,35 +48,30 @@ public class A2Core extends PApplet {
 
     public void draw() {
         clear();
-        for (int i = 0; i < blocks.size(); i++) {
-            blocks.get(i).draw();
-        }
-        batY = height - 40;
         background(139, 69, 19);
+        for (Block block : blocks) {
+            block.draw();
+        }
+        fill(200, 200, 200);
         int diam = 80;
         int raduis = diam / 2;
-        ellipse(ballX - xVec, ballY - yVec, diam - 2, diam - 2);
+        ellipse(ballX - velocity.x, ballY - velocity.y, diam - 2, diam - 2);
         int lim = 6;
-        if (yVec < lim) {
-            yVec += gravVal;
+        float gravVal = 0.1f;
+        if (velocity.y < lim) {
+            velocity.y += gravVal;
         }
-        ballX += xVec;
-        ballY += yVec;
+        ballX += velocity.x;
+        ballY += velocity.y;
         if (ballY > height - (raduis) || ballY < (raduis)) {
-            yVec -= 2 * yVec;
+            velocity.y -= 2 * velocity.y;
         } else if (ballX > width - (raduis) || ballX < (raduis)) {
-            xVec -= 2 * xVec;
+            velocity.x -= 2 * velocity.x;
         }
         rect(batX - batWid / 2, batY, batWid, batHei);
         if (mouseKey) {
-            //testing only
-            batX = mouseX;
+            batX = mouseX + (batWid / 2);
             batY = mouseY;
-//            if (batX -20 < mouseX-5) {
-//                batX += 6;
-//            } else if (batX -20 > mouseX+5) {
-//                batX -= 6;
-//            }
         } else {
             if (keyPressed) {
                 if (key == 'a') {
@@ -80,18 +84,14 @@ public class A2Core extends PApplet {
 
             }
         }
-        if (ballY + raduis >= batY - 3 && ballX + raduis > batX - batWid && ballX < batX + batWid - raduis) {
-            xVec *= -1;
-            yVec *= -1;
-        }
+
     }
 
     public void mousePressed() {
         mouseKey = !mouseKey;
     }
 
-
-    public class Block {
+    private class Block {
 
         private int hp = 3;
         private float posY;
@@ -101,8 +101,8 @@ public class A2Core extends PApplet {
         Block(float posX, float posY, float wid, float hei) {
             this.posX = posX;
             this.posY = posY;
-            this.wid = 40;
-            this.hei = 40;
+            this.wid = wid;
+            this.hei = hei;
         }
 
         public void hit() {
@@ -126,10 +126,94 @@ public class A2Core extends PApplet {
             } else if (hp == 1) {
                 fill(255, 0, 0);
             }
-            System.out.println("H "+hei);
             rect(posX, posY, wid, hei);
-            System.out.println("W "+wid);
-            fill(200,200,200);
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    float distX = Math.abs(ballX - batX - batWid / 2);
+//    float distY = Math.abs(ballY - batY - batHei / 2);
+//        if (distY <= (batHei / 2)) {
+//                velocity.x*=-1;
+//                if (ballX + raduis > batX && ballX + raduis < batX + batWid) {
+//        ballX = batX - raduis - 1;
+//        } else {
+//        ballX = batX + batWid + raduis + 1;
+//        }
+//        }
+//        if (distX <= (batWid / 2)) {
+//        velocity.y*=-1;
+//        if (ballY + raduis > batY && ballY + raduis < batY + batHei) {
+//        ballY = batY - raduis - 1;
+//        } else {
+//        ballY = batY + batHei + raduis + 1;
+//        }
+//        }
+//        if (ballY + raduis > batY && ballY + raduis < batY + batHei) {
+//        ballY = batY - raduis - 1;
+//        } else {
+//        ballY = batY + batHei + raduis + 1;
+//        }
+//        if (sq(batX-ballX)+sq(batY-ballY) > sq(raduis) ||
+//        sq((batX+batWid)-ballX)+sq(batY-ballY) > sq(raduis) ||
+//        sq(batX-ballX)+sq((batY+batHei)-ballY) > sq(raduis) ||
+//        sq((batX+batWid)-ballX)+sq((batY+batHei)-ballY) > sq(raduis)) {
+//        velocity.x*=-1;
+//        velocity.y*=-1;
+//        }
+
+//    float distX = Math.abs(ballX - (batX - batWid / 2));
+//    float distY = Math.abs(ballY - (batY - batHei / 2));
+//    float dx = distX - batWid / 2;
+//    float dy = distY - batHei / 2;
+//        if (distY <= (batHei / 2)) {
+//                velocity.x = -velocity.x;
+//                if (ballX + raduis > batX && batX + raduis < batX + batWid) {
+//        batX = batX - raduis - 1;
+//        } else {
+//        batX = batX + batWid + raduis + 1;
+//        }
+//        }
+//        if (distX <= (batWid / 2)) {
+//        velocity.y = -velocity.y;
+//        if (ballY + raduis < batX + batHei) {
+//        ballY = batX - raduis - 1;
+//        } else {
+//        ballY = batX + batHei + raduis + 1;
+//        }
+//        }
+//        if (dx * dx + dy * dy <= raduis * raduis) {
+//        if (ballY + raduis < batX + batHei) {
+//        ballY = batX - raduis - 1;
+//        } else {
+//        ballY = batX + batHei + raduis + 1;
+//        }
+//        velocity = velocity.mult(-1);
+//        }
