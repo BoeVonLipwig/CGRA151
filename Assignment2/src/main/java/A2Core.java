@@ -6,37 +6,31 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
+
 
 public class A2Core extends PApplet {
-
-
 
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());
     }
 
-    private float xVec = 6;
-    private float yVec = 6;
-    private float ballY = height / 2;
-    private float ballX = width / 2;
+    private float xVec = 5;
+    private float yVec = 5;
+    private float ballX;
+    private float ballY;
     private boolean mouseKey = true;
-    private float batX = width / 2;
-    private float batY = width / 2;
+    private float batX;
+    private float batY;
     private float batWid = 100;
     private float batHei = 20;
+    private float batWRad = batWid / 2;
+    private float batHRad = batHei / 2;
+    private int diam = 80;
     private PVector velocity = new PVector(xVec, yVec);
-    private ArrayList<Block> blocks = new ArrayList();
 
     public void setup() {
-        rectMode(CENTER);
-        int numWide = 5;
-        int numHigh = 2;
-        for (int i = 0; i < numWide; i++) {
-            for (int j = 0; j < numHigh; j++) {
-                blocks.add(new Block((batWid * i) + batWid, (batHei * j) + 40, batWid, batHei));
-            }
-        }
+        ballX = batX = width / 2;
+        ballY = batY = height / 2;
     }
 
     public void settings() {
@@ -47,67 +41,68 @@ public class A2Core extends PApplet {
     public void draw() {
         clear();
         background(139, 69, 19);
-        for (Block block : blocks) {
-            block.draw();
-        }
         fill(200, 200, 200);
-        int diam = 80;
-        int raduis = diam / 2;
-        ellipse(ballX - velocity.x, ballY - velocity.y, diam - 2, diam - 2);
-        ballX += velocity.x;
-        ballY += velocity.y;
-        if (ballY > height - (raduis) || ballY < (raduis)) {
-            velocity.y -= 2 * velocity.y;
-        } else if (ballX > width - (raduis) || ballX < (raduis)) {
-            velocity.x -= 2 * velocity.x;
-        }
-        rect(batX - batWid / 2, batY, batWid, batHei);
-        if (mouseKey) {
-            batX = mouseX + (batWid / 2);
-            batY = mouseY;
-        } else {
-            if (keyPressed) {
-                if (key == 'a') {
-                    batX--;
-                    System.out.println("1");
-                } else if (key == 'd') {
-                    batX++;
-                    System.out.println("2");
-                }
+        ballX += velocity.x / 2;
+        ballY += velocity.y / 2;
+        checkCollision();
+        rect(batX = (mouseX - batWRad), batY = (mouseY - batHRad), batWid, batHei);
+        ellipse(ballX, ballY, diam, diam);
+        ballX += velocity.x / 2;
+        ballY += velocity.y / 2;
 
-            }
+    }
+    //th following method was made with a lot of help from sanjay govind and closely follows his code
+    private void checkCollision() {
+        int radius = diam / 2;
+        if (ballX > width - radius) {
+            ballX = width - radius;
+            velocity.x *= -1;
+        } else if (ballX < radius) {
+            velocity.x *= -1;
+            ballX = radius;
         }
-        float distX = Math.abs(ballX - (batX - batWid / 2));
-        float distY = Math.abs(ballY - (batY - batHei / 2));
-        float dx = distX - batWid / 2;
-        float dy = distY - batHei / 2;
-        if (distX > (batWid / 2 + raduis)) {
+        if (ballY > height - radius) {
+            velocity.y *= -1;
+            ballY = height - radius;
+        } else if (ballY < radius) {
+            velocity.y *= -1;
+            ballY = radius;
+        }
+        float distX = Math.abs(ballX - batX - batWRad);
+        float distY = Math.abs(ballY - batY - batHRad);
+        if (distX > (batWRad + radius)) {
             return;
         }
-        if (distY > (batHei / 2 + raduis)) {
+        if (distY > (batHRad + radius)) {
             return;
         }
-        if (distY <= (batHei / 2)) {
+
+        if (distY <= (batHRad)) {
             velocity.x = -velocity.x;
-            if (ballX + raduis > batX && batX + raduis < batX + batWid) {
-                batX = batX - raduis - 1;
+            if (ballX + radius < batX + batWid) {
+                ballX = batX - radius - 1;
             } else {
-                batX = batX + batWid + raduis + 1;
+                ballX = batX + batWid + radius + 1;
             }
+            return;
         }
-        if (distX <= (batWid / 2)) {
+        if (distX <= (batWRad)) {
             velocity.y = -velocity.y;
-            if (ballX + raduis < batX + batHei) {
-                ballX = batX - raduis - 1;
+            if (ballY + radius < batY + batHei) {
+                ballY = batY - radius - 1;
             } else {
-                ballX = batX + batHei + raduis + 1;
+                ballY = batY + batHei + radius + 1;
             }
+            return;
         }
-        if (dx * dx + dy * dy <= raduis * raduis) {
-            if (ballY + raduis < batY + batHei) {
-                ballY = batY - raduis - 1;
+
+        float dx = distX - batWRad;
+        float dy = distY - batHRad;
+        if (dx * dx + dy * dy <= sq(radius)) {
+            if (ballY + radius < batY + batHei) {
+                ballY = batY - radius - 1;
             } else {
-                ballY = batY + batHei + raduis + 1;
+                ballY = batY + batHei + radius + 1;
             }
             velocity = velocity.mult(-1);
         }
@@ -117,42 +112,6 @@ public class A2Core extends PApplet {
         mouseKey = !mouseKey;
     }
 
-    private class Block {
 
-        private int hp = 3;
-        private float posY;
-        private float posX;
-        private float wid, hei;
-
-        Block(float posX, float posY, float wid, float hei) {
-            this.posX = posX;
-            this.posY = posY;
-            this.wid = wid;
-            this.hei = hei;
-        }
-
-        public void hit() {
-            hp--;
-            draw();
-        }
-
-        public float getPosX() {
-            return posX;
-        }
-
-        public float getPosY() {
-            return posY;
-        }
-
-        void draw() {
-            if (hp == 3) {
-                fill(0, 255, 0);
-            } else if (hp == 2) {
-                fill(255, 255, 0);
-            } else if (hp == 1) {
-                fill(255, 0, 0);
-            }
-            rect(posX, posY, wid, hei);
-        }
-    }
 }
+
