@@ -1,4 +1,4 @@
-/*
+package A2Comp;/*
   Started by Shaun on 31/07/2016.
  */
 
@@ -6,9 +6,10 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 
 
-public class A2Core extends PApplet {
+public class A2Comp extends PApplet {
 
     public static void main(String[] args) {
         main(MethodHandles.lookup().lookupClass().getName());
@@ -27,10 +28,18 @@ public class A2Core extends PApplet {
     private float batHRad = batHei / 2;
     private int diam = 80;
     private PVector velocity = new PVector(xVec, yVec);
+    private ArrayList<Block> blocks = new ArrayList();
 
     public void setup() {
         ballX = batX = width / 2;
         ballY = batY = height / 2;
+        int numWide = 5;
+        int numHigh = 2;
+        for (int i = 0; i < numWide; i++) {
+            for (int j = 0; j < numHigh; j++) {
+                blocks.add(new Block((batWid * i) + 40, (batHei * j) + 40, batWid, batHei));
+            }
+        }
     }
 
     public void settings() {
@@ -41,6 +50,9 @@ public class A2Core extends PApplet {
     public void draw() {
         clear();
         background(139, 69, 19);
+        for (Block block : blocks) {
+            block.draw();
+        }
         fill(200, 200, 200);
         ballX += velocity.x / 2;
         ballY += velocity.y / 2;
@@ -112,6 +124,43 @@ public class A2Core extends PApplet {
         mouseKey = !mouseKey;
     }
 
+    private class Block {
 
+        private int hp = 3;
+        private float posY;
+        private float posX;
+        private float wid, hei;
+
+        Block(float posX, float posY, float wid, float hei) {
+            this.posX = posX;
+            this.posY = posY;
+            this.wid = wid;
+            this.hei = hei;
+        }
+
+        public void hit() {
+            hp--;
+            draw();
+        }
+
+        public float getPosX() {
+            return posX;
+        }
+
+        public float getPosY() {
+            return posY;
+        }
+
+        void draw() {
+            if (hp == 3) {
+                fill(0, 255, 0);
+            } else if (hp == 2) {
+                fill(255, 255, 0);
+            } else if (hp == 1) {
+                fill(255, 0, 0);
+            }
+            rect(posX, posY, wid, hei);
+        }
+    }
 }
 
