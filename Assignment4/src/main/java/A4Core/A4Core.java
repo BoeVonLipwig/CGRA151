@@ -17,14 +17,13 @@ public class A4Core extends PApplet {
     private PVector[] points = new PVector[6];
     private PVector[] line;
 
-    private ArrayList<PVector> pastPoint = new ArrayList<PVector>();
+    private ArrayList<PVector> pastPoint = new ArrayList<>();
 
     public void setup() {
         int farFromWall = 100;
-        line = new PVector[]{new PVector(farFromWall, -20), new PVector(farFromWall, height + 20)};
+        line = new PVector[]{new PVector(farFromWall+40, 20), new PVector(farFromWall, height - 20)};
         //setting up random points in the PVector array
         produceRandom(points);
-        /* makes it easier to see difference between line and curve */
         strokeWeight(4);
         rectMode(CENTER);
     }
@@ -49,6 +48,8 @@ public class A4Core extends PApplet {
         noFill();
         stroke(0);
         line(line[0].x, line[0].y, line[1].x, line[1].y);
+        changePoint();
+        clip();
         stroke(255, 0, 0);
         strokeWeight(1);
         rect(line[0].x, line[0].y, 10, 10);
@@ -56,8 +57,6 @@ public class A4Core extends PApplet {
         for (PVector point : points) {
             rect(point.x, point.y, 10, 10);
         }
-        changePoint();
-        clip();
     }
 
     //change to return PVector array
@@ -69,21 +68,19 @@ public class A4Core extends PApplet {
             pastPoint.clear();
         }
         for (int i = 0; i < points.length; i++) {
-            if (points[i].x <= line[0].x) {
+            if (isInside(points[i]) && isInside(getIndex(i+1))) {
                 pastPoint.add(points[i]);
-                if (points[(i + 1) % points.length].x > line[0].x) {
-                    pastPoint.add(getIntercept(points[i], points[(i + 1) % points.length]));
+            } else {
+                //first is in second is out
+                if (isInside(points[i])) {
+                    pastPoint.add(points[i]);
+                    pastPoint.add(getIntercept(points[i], getIndex(i+1)));
                 }
+                //second is in first is out
+                if (isInside(getIndex(i+1))) {
+                    pastPoint.add(getIntercept(getIndex(i+1),points[i]));
 
-
-                if (i - 1 < 0) {
-                    if (points[points.length - 1].x > line[0].x) {
-                        pastPoint.add(pastPoint.size()-1,getIntercept(points[i], points[points.length - 1]));
-                    }
-                } else if (points[(i - 1) % points.length].x > line[0].x) {
-                    pastPoint.add(pastPoint.size()-1,getIntercept(points[i], points[(i - 1)]));
                 }
-
             }
 
         }
@@ -97,9 +94,19 @@ public class A4Core extends PApplet {
             vertex(pastPoint.get(0).x, pastPoint.get(0).y);
         }
         endShape();
+        stroke(255,0,0);
         for (PVector aPastPoint : pastPoint) {
             rect(aPastPoint.x, aPastPoint.y, 10, 10);
         }
+    }
+
+    private boolean isInside(PVector point){
+        //calc difference in y values (don't know why it needs to be made negative)
+        float A = -(line[1].y - line[0].y);
+        //calc difference in x values
+        float B = line[1].x - line[0].x;
+        float C = line[1].y * line[0].x - line[1].x * line[0].y;
+        return (A*point.x+B*point.y+C)>1;
     }
 
     private PVector getIntercept(PVector f, PVector s) {
@@ -108,7 +115,6 @@ public class A4Core extends PApplet {
         float A = -(line[1].y - line[0].y);
         //calc difference in x values
         float B = line[1].x - line[0].x;
-        //?????
         float C = line[1].y * line[0].x - line[1].x * line[0].y;
 
         float rise=A * f.x + B * f.y + C;
