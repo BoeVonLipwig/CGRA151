@@ -26,6 +26,7 @@
         <module name="Assignment2" />
         <module name="Assignment3" />
         <module name="Assignment4" />
+        <module name="IvanTheRussian" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
@@ -35,6 +36,7 @@
       <module name="Assignment3" target="1.8" />
       <module name="Assignment4" target="1.8" />
       <module name="CGRA151" target="1.8" />
+      <module name="IvanTheRussian" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
