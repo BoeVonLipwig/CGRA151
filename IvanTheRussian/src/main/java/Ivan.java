@@ -1,4 +1,3 @@
-import com.sun.xml.internal.bind.v2.TODO;
 import processing.core.PVector;
 
 /**
@@ -9,7 +8,7 @@ import processing.core.PVector;
 public class Ivan {
 
 
-    private PVector position;
+    private PVector position,accl;
     int width, height;
     private boolean facingRight;
     private boolean hasExplosive;
@@ -29,13 +28,13 @@ public class Ivan {
             position.x--;
         }
     }
-    //TODO should movement even be here not in main?
+
     public void jump(){
 
     }
 
-    public void takeDmg(int ammount) {
-        health -= ammount;
+    public void takeDmg(int amount) {
+        health -= amount;
     }
 
     public void cycleAmmo() {
