@@ -13,8 +13,7 @@ class Boolet {
     private boolean explosive;
 
     Boolet(float x, float y, double speed, boolean explosive) {
-        position.x = x;
-        position.y = y;
+        position=new PVector(x,y);
         original = position;
         this.speed = speed;
         this.explosive = explosive;
@@ -25,7 +24,15 @@ class Boolet {
         }
     }
 
-    public void setIndex(int index){
+    public PVector getPosition() {
+        return position;
+    }
+
+    double getSpeed() {
+        return speed;
+    }
+
+    void setIndex(int index){
         this.index=index;
     }
 
