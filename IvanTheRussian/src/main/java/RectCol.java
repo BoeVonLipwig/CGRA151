@@ -1,3 +1,5 @@
+import java.awt.*;
+
 /**
  * Created by Shaun Sinclair.
  * CGRA 151.
@@ -5,7 +7,7 @@
  */
 public class RectCol {
 
-    RectCol(){
+    RectCol(double rect1x,double rect1y,double rect1width,double rect1height,double rect2x,double rect2y,double rect2width, double rect2height){
 
     }
 }

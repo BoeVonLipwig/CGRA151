@@ -1,19 +1,22 @@
 import processing.core.PVector;
 
+import java.util.ArrayList;
+
 /**
  * Created by Shaun Sinclair.
  * CGRA 151.
  * Start date: 27/09/2016.
  */
-public class Ivan {
+class Ivan {
 
 
-    private PVector position,accl;
-    int width, height;
-    private boolean facingRight;
+    PVector position=new PVector(),accl=new PVector();
+    int width, height, moveSpeed=10;
+    private boolean facingRight = true;
     private boolean hasExplosive;
     private int health = 10;
     private boolean ammoType;
+    private static ArrayList<Boolet> bullets;
 
     Ivan(float x, float y, boolean hasExplosive) {
         position.x = x;
@@ -21,16 +24,19 @@ public class Ivan {
         this.hasExplosive = hasExplosive;
     }
 
-    public void move() {
-        if (facingRight) {
-            position.x++;
-        }else{
-            position.x--;
-        }
+    void draw() {
     }
 
-    public void jump(){
+    void move() {
+        double grav = -2;
+        accl.y += grav;
+        facingRight = accl.x >= 0;
+        position.x += accl.x;
+        position.y += accl.y;
+    }
 
+    void jump() {
+        accl.y += 20;
     }
 
     public void takeDmg(int amount) {
@@ -44,7 +50,15 @@ public class Ivan {
 
     }
 
+    static void removeBullet(int index) {
+        bullets.remove(index);
+    }
+
     public void Shoot() {
-        new Boolet(position.x, position.y, 5, ammoType);
+        double speed=-5;
+        if (facingRight) speed *=-1;
+        Boolet cur=new Boolet(position.x, position.y, speed, ammoType);
+        cur.setIndex(bullets.size());
+        bullets.add(cur);
     }
 }

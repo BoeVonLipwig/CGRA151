@@ -5,9 +5,10 @@ import processing.core.PVector;
  * CGRA 151.
  * Start date: 27/09/2016.
  */
-public class Boolet {
+class Boolet {
     private PVector position, original;
     private double speed, allowed = 200;
+    private int index;
     //will need to be int if add more ammo types
     private boolean explosive;
 
@@ -24,19 +25,15 @@ public class Boolet {
         }
     }
 
+    public void setIndex(int index){
+        this.index=index;
+    }
 
     public void move() {
         if (position.dist(original) > allowed) {
-            trigger();
+            Ivan.removeBullet(index);
         }
         position.x += speed;
     }
 
-    public void trigger() {
-        if (explosive) {
-
-        } else {
-
-        }
-    }
 }
