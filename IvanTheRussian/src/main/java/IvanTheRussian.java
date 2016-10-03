@@ -17,11 +17,11 @@ public class IvanTheRussian extends PApplet {
     }
 
 
-//    public static IvanTheRussian Instance;
+    static IvanTheRussian instance;
     //base size of all objects(grid size)
     static int size = 40;
     //player(not for hating)
-    private Ivan ivan = new Ivan(height - size, size, false);
+    private Ivan ivan;
     //Images
     private PImage bg;          //background
     private PImage DirtPlat;    //ground(dirt)
@@ -33,7 +33,8 @@ public class IvanTheRussian extends PApplet {
     private ArrayList<Object> objects = new ArrayList<>();
 
     public void setup() {
-//        Instance=this;
+        instance =this;
+        ivan = new Ivan(height - size, size, false);
         bg = loadImage("Background.jpg");
         ArrayList<PImage> images=new ArrayList<>();
         images.add(DirtPlat = loadImage("Earth.png"));
@@ -86,6 +87,9 @@ public class IvanTheRussian extends PApplet {
                     if(blip) image(MineOn, temp.getPos().x, temp.getPos().y);
                     else image(MineOff, temp.getPos().x, temp.getPos().y);
                     break;
+                case "Head":
+                    image(ivan.head, temp.getPos().x, temp.getPos().y);
+                    break;
             }
         }
     }
@@ -99,7 +103,7 @@ public class IvanTheRussian extends PApplet {
                 objects.add(new Object(new PVector(width / 2, size*4), "Plat"));
                 objects.add(new Object(new PVector(width / 2, size*8), "Spike"));
                 objects.add(new Object(new PVector(width / 2, size*9), "Plat"));
-
+                objects.add(new Object(new PVector(width / 2, size*11), "Head"));
                 break;
             case 1:
 
