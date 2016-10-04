@@ -24,7 +24,7 @@ class Boolet {
         }
     }
 
-    public PVector getPosition() {
+    PVector getPosition() {
         return position;
     }
 

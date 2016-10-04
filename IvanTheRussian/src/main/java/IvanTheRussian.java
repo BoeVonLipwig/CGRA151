@@ -109,7 +109,7 @@ public class IvanTheRussian extends PApplet {
         }
     }
 
-    public static void setJumpAllowed(boolean setJumpAllowed) {
+    static void setJumpAllowed(boolean setJumpAllowed) {
         jumpAllowed = setJumpAllowed;
     }
 

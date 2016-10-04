@@ -10,7 +10,6 @@ import java.util.ArrayList;
  */
 class Ivan {
 
-    private IvanTheRussian game;
     private PVector position, acceleration;
     private int ivanHeight =IvanTheRussian.size*2;
     private boolean facingRight = true;
@@ -24,7 +23,7 @@ class Ivan {
         this.position = position;
         acceleration = new PVector(0,0);
         bullets = new ArrayList<>();
-        game = IvanTheRussian.instance;
+        IvanTheRussian game = IvanTheRussian.instance;
         this.hasExplosive = hasExplosive;
         ivan = game.loadImage("Ivan2.png");
         int width = IvanTheRussian.size * 2;
@@ -101,7 +100,7 @@ class Ivan {
         return acceleration;
     }
 
-    public PImage getIvan(){
+    PImage getIvan(){
         return ivan;
     }
 
