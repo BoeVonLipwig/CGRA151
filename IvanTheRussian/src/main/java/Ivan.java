@@ -11,51 +11,55 @@ import java.util.ArrayList;
 class Ivan {
 
     private PVector position, acceleration;
-    private int ivanHeight =IvanTheRussian.size*2;
+    private int ivanHeight = IvanTheRussian.size * 2;
     private boolean facingRight = true;
     private boolean hasExplosive;
     private int health = 10;
     private boolean ammoType;
     private static ArrayList<Boolet> bullets;
     private PImage ivan;
+    private PImage[] ivanImages = {null, null, null, null};
 
     Ivan(PVector position, boolean hasExplosive) {
         this.position = position;
-        acceleration = new PVector(0,0);
+        acceleration = new PVector(0, 0);
         bullets = new ArrayList<>();
         IvanTheRussian game = IvanTheRussian.instance;
         this.hasExplosive = hasExplosive;
-        ivan = game.loadImage("Ivan2.png");
+        ivanImages[0] = game.loadImage("IvanRight.png");
+        ivanImages[1] = game.loadImage("IvanLeft.png");
+        ivanImages[2] = game.loadImage("IvanRunningRight.png");
+        ivanImages[3] = game.loadImage("IvanRunningLeft.png");
         int width = IvanTheRussian.size * 2;
         ivan.resize(width, ivanHeight);
     }
 
     void move() {
         facingRight = acceleration.x >= 0;
-        boolean[] keys=IvanTheRussian.getKeys();
+        boolean[] keys = IvanTheRussian.getKeys();
         double grav = 0.981;
         acceleration.y += grav;
-        if(position.y > 600-ivanHeight){
-            acceleration.y=0;
-            position.y= 600-ivanHeight;
+        if (position.y > 600 - ivanHeight) {
+            acceleration.y = 0;
+            position.y = 600 - ivanHeight;
         }
 //            die();
 //            return;
-        if(keys[0]){
-            acceleration.y-=10;
-            keys[0]=false;
+        if (keys[0]) {
+            acceleration.y -= 10;
+            keys[0] = false;
         }
-        if(keys[1]){
-            acceleration.x-=5;
+        if (keys[1]) {
+            acceleration.x -= 5;
         }
-        if(keys[2]){
-            acceleration.x+=5;
+        if (keys[2]) {
+            acceleration.x += 5;
         }
-        if(keys[3]){
-            acceleration.y+=1;
+        if (keys[3]) {
+            acceleration.y += 1;
         }
         position.add(acceleration);
-        acceleration.x=0;
+        acceleration.x = 0;
         acceleration.limit(20);
     }
 
@@ -100,7 +104,7 @@ class Ivan {
         return acceleration;
     }
 
-    PImage getIvan(){
+    PImage getIvan() {
         return ivan;
     }
 
