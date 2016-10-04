@@ -77,10 +77,6 @@ class Ivan {
 
     }
 
-    PVector getAcceleration() {
-        return acceleration;
-    }
-
     int getHealth() {
         return health;
     }

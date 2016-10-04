@@ -34,7 +34,7 @@ public class IvanTheRussian extends PApplet {
     //Objects
     private static boolean keys[] = {false, false, false, false};
     private ArrayList<Object> objects = new ArrayList<>();
-    boolean jumpAllowed =true;
+    private static boolean jumpAllowed=true;
 
     public void setup() {
         instance = this;
@@ -109,11 +109,17 @@ public class IvanTheRussian extends PApplet {
         }
     }
 
+    public static void setJumpAllowed(boolean setJumpAllowed) {
+        jumpAllowed = setJumpAllowed;
+    }
+
     public void keyPressed(){
         //up
         if (key == 'w' || key == 'W') {
             if(jumpAllowed){
-            keys[0] = true;}
+            keys[0] = true;
+                jumpAllowed=false;
+            }
             System.out.println("W");
         }
         //left
