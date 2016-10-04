@@ -11,56 +11,78 @@ import java.util.ArrayList;
 class Ivan {
 
     private IvanTheRussian game;
-    PVector position,accl;
-    int width, height, moveSpeed=10;
+    private PVector position, acceleration;
+    private int ivanHeight =IvanTheRussian.size*2;
     private boolean facingRight = true;
     private boolean hasExplosive;
     private int health = 10;
     private boolean ammoType;
     private static ArrayList<Boolet> bullets;
-    PImage head;
+    private PImage ivan;
 
-    Ivan(float x, float y, boolean hasExplosive) {
-        game=IvanTheRussian.instance;
-        position.x = x;
-        position.y = y;
+    Ivan(PVector position, boolean hasExplosive) {
+        this.position = position;
+        acceleration = new PVector(0,0);
+        bullets = new ArrayList<>();
+        game = IvanTheRussian.instance;
         this.hasExplosive = hasExplosive;
-        head=game.loadImage("Head.png");
-        head.resize(IvanTheRussian.size *2, IvanTheRussian.size);
-        position=new PVector();
-        accl=new PVector();
-    }
-
-    void draw() {
+        ivan = game.loadImage("Ivan2.png");
+        int width = IvanTheRussian.size * 2;
+        ivan.resize(width, ivanHeight);
     }
 
     void move() {
-        double grav = -2;
-        accl.y += grav;
-        facingRight = accl.x >= 0;
-        position.x += accl.x;
-        position.y += accl.y;
+        facingRight = acceleration.x >= 0;
+        boolean[] keys=IvanTheRussian.getKeys();
+        double grav = 0.981;
+        acceleration.y += grav;
+        if(position.y > 600-ivanHeight){
+            acceleration.y=0;
+            position.y= 600-ivanHeight;
+        }
+//            die();
+//            return;
+        if(keys[0]){
+            acceleration.y-=10;
+            keys[0]=false;
+        }
+        if(keys[1]){
+            acceleration.x-=5;
+        }
+        if(keys[2]){
+            acceleration.x+=5;
+        }
+        if(keys[3]){
+            acceleration.y+=1;
+        }
+        position.add(acceleration);
+        acceleration.x=0;
+        acceleration.limit(20);
     }
 
-    void jump() {
-        accl.y += 20;
-    }
-
-    public void takeDmg(int amount) {
+    private void takeDmg(int amount) {
         health -= amount;
-        if(health<0)die();
-        else if (health>10)health=10;
+        if (health < 0) die();
+        else if (health > 10) health = 10;
     }
 
-    public void heal(int amount){
+    public void heal(int amount) {
         takeDmg(-amount);
     }
 
-    public void cycleAmmo() {
+    void cycleAmmo() {
         if (hasExplosive) {
             ammoType = !ammoType;
         }
 
+    }
+
+    PVector getAcceleration() {
+        return acceleration;
+    }
+
+    int getHealth() {
+        return health;
     }
 
     static void removeBullet(int index) {
@@ -68,9 +90,9 @@ class Ivan {
     }
 
     public void Shoot() {
-        double speed=-5;
-        if (facingRight) speed *=-1;
-        Boolet cur=new Boolet(position.x, position.y, speed, ammoType);
+        double speed = -5;
+        if (facingRight) speed *= -1;
+        Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
         cur.setIndex(bullets.size());
         bullets.add(cur);
     }
@@ -80,10 +102,14 @@ class Ivan {
     }
 
     PVector getAcl() {
-        return accl;
+        return acceleration;
     }
 
-    private void die(){
+    public PImage getIvan(){
+        return ivan;
+    }
+
+    void die() {
 
     }
 }
