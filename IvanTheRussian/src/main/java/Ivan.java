@@ -31,7 +31,10 @@ class Ivan {
         ivanImages[2] = game.loadImage("IvanRunningRight.png");
         ivanImages[3] = game.loadImage("IvanRunningLeft.png");
         int width = IvanTheRussian.size * 2;
-        ivan.resize(width, ivanHeight);
+        for (PImage ivanImage : ivanImages) {
+            ivanImage.resize(width, ivanHeight);
+        }
+        ivan=ivanImages[0];
     }
 
     void move() {
@@ -51,9 +54,11 @@ class Ivan {
         }
         if (keys[1]) {
             acceleration.x -= 5;
+            ivan=ivanImages[3];
         }
         if (keys[2]) {
             acceleration.x += 5;
+            ivan=ivanImages[2];
         }
         if (keys[3]) {
             acceleration.y += 1;
