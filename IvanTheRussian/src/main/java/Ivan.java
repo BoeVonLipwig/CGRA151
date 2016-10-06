@@ -11,11 +11,10 @@ import java.util.ArrayList;
 class Ivan {
 
     private PVector position, acceleration;
-    private int ivanHeight = IvanTheRussian.size * 2;
+    private int size = IvanTheRussian.size, ivanHeight = size * 2, width = size * 2,health = 10, count = 0;;
     private boolean facingRight = true;
     private boolean hasExplosive;
-    private int health = 10;
-    private boolean ammoType;
+    private boolean ammoType, spriteChanger;
     private static ArrayList<Boolet> bullets;
     private PImage ivan;
     private PImage[] ivanImages = {null, null, null, null};
@@ -30,22 +29,31 @@ class Ivan {
         ivanImages[1] = game.loadImage("IvanLeft.png");
         ivanImages[2] = game.loadImage("IvanRunningRight.png");
         ivanImages[3] = game.loadImage("IvanRunningLeft.png");
-        int width = IvanTheRussian.size * 2;
-        for (PImage ivanImage : ivanImages) {
-            ivanImage.resize(width, ivanHeight);
+        for (int i = 0; i < ivanImages.length; i++) {
+            if (i <= 1) {
+                ivanImages[i].resize(width, ivanHeight);
+            } else {
+                ivanImages[i].resize((int) ((width / 100) * 93.36), ivanHeight);
+            }
         }
-        ivan=ivanImages[0];
+        ivan = ivanImages[0];
+    }
+
+    public void setIvanImages(int index) {
+        ivan=ivanImages[index];
     }
 
     void move() {
         facingRight = acceleration.x >= 0;
         boolean[] keys = IvanTheRussian.getKeys();
-        double grav = 0.981;
+        double grav = 0.4;
         acceleration.y += grav;
         if (position.y > 600 - ivanHeight) {
             acceleration.y = 0;
             position.y = 600 - ivanHeight;
+            IvanTheRussian.setJumpAllowed(true);
         }
+
 //            die();
 //            return;
         if (keys[0]) {
@@ -54,19 +62,49 @@ class Ivan {
         }
         if (keys[1]) {
             acceleration.x -= 5;
-            ivan=ivanImages[3];
+            count++;
+            if (count % 3 == 0) {
+                count = 0;
+                spriteChanger = !spriteChanger;
+            }
+            if (spriteChanger) ivan = ivanImages[3];
+            else ivan = ivanImages[1];
         }
         if (keys[2]) {
             acceleration.x += 5;
-            ivan=ivanImages[2];
+            count++;
+            if (count % 3 == 0) {
+                count = 0;
+                spriteChanger = !spriteChanger;
+            }
+            if (spriteChanger) ivan = ivanImages[2];
+            else ivan = ivanImages[0];
         }
         if (keys[3]) {
             acceleration.y += 1;
         }
-        position.add(acceleration);
+        position.x += acceleration.x;
+        Blocks x;
+        if ((x = IvanTheRussian.instance.checkCollide()) != null) {
+            if (acceleration.x > 0) {
+                position.x = x.getPos().x - width;
+            } else {
+                position.x = x.getPos().x + width / 2;
+            }
+        }
+        position.y += acceleration.y;
+        if ((x = IvanTheRussian.instance.checkCollide()) != null) {
+            if (acceleration.y > 0) {
+                position.y = x.getPos().y - ivanHeight;
+            } else {
+                position.y = x.getPos().y + width / 2;
+            }
+            acceleration.y=0;
+        }
         acceleration.x = 0;
         acceleration.limit(20);
     }
+
 
     private void takeDmg(int amount) {
         health -= amount;

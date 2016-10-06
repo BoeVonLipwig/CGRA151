@@ -33,12 +33,13 @@ public class IvanTheRussian extends PApplet {
     private int mineChanger = 0;
     //Objects
     private static boolean keys[] = {false, false, false, false};
-    private ArrayList<Object> objects = new ArrayList<>();
-    private static boolean jumpAllowed=true;
+    private ArrayList<Blocks> objects = new ArrayList<>();
+    private static boolean jumpAllowed = true;
 
     public void setup() {
+        imageMode(CENTER);
         instance = this;
-        ivan = new Ivan(new PVector(size,size), false);
+        ivan = new Ivan(new PVector(size, size), false);
         bg = loadImage("Background.jpg");
         ArrayList<PImage> images = new ArrayList<>();
         images.add(DirtPlat = loadImage("Earth.png"));
@@ -51,30 +52,29 @@ public class IvanTheRussian extends PApplet {
         loadLevel(0);
     }
 
-
     public void settings() {
-        size(600,600);
+        size(600, 600);
     }
 
     public void draw() {
         bg.resize(width, height);
         background(bg);
-        for (Object temp : objects) {
+        for (Blocks temp : objects) {
             String type = temp.getType();
             switch (type) {
                 case "Plat":
-                    image(DirtPlat, temp.getPos().x, temp.getPos().y);
+                    image(DirtPlat, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
                 case "Spike":
-                    image(Spike, temp.getPos().x, temp.getPos().y);
+                    image(Spike, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
                 case "Mine":
                     mineChanger++;
                     if (mineChanger % 3 == 0) {
                         blip = !blip;
                     }
-                    if (blip) image(MineOn, temp.getPos().x, temp.getPos().y);
-                    else image(MineOff, temp.getPos().x, temp.getPos().y);
+                    if (blip) image(MineOn, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
+                    else image(MineOff, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
             }
         }
@@ -83,8 +83,8 @@ public class IvanTheRussian extends PApplet {
         drawPlayer();
     }
 
-    private void drawPlayer(){
-        image(ivan.getIvan(),ivan.getPosition().x,ivan.getPosition().y);
+    private void drawPlayer() {
+        image(ivan.getIvan(), ivan.getPosition().x-size/2, ivan.getPosition().y+size);
     }
 
 
@@ -113,34 +113,29 @@ public class IvanTheRussian extends PApplet {
         jumpAllowed = setJumpAllowed;
     }
 
-    public void keyPressed(){
+    public void keyPressed() {
         //up
         if (key == 'w' || key == 'W') {
-            if(jumpAllowed){
-            keys[0] = true;
-                jumpAllowed=false;
+            if (jumpAllowed) {
+                keys[0] = true;
+                jumpAllowed = false;
             }
-            System.out.println("W");
         }
         //left
         if (key == 'a' || key == 'A') {
             keys[1] = true;
-            System.out.println("A");
         }
         //right
         if (key == 'd' || key == 'D') {
             keys[2] = true;
-            System.out.println("D");
         }
         ///down
         if (key == 's' || key == 'S') {
             keys[3] = true;
-            System.out.println("S");
         }
         //change ammo
         if (key == 'q' || key == 'Q') {
             ivan.cycleAmmo();
-            System.out.println("Q");
         }
     }
 
@@ -150,9 +145,11 @@ public class IvanTheRussian extends PApplet {
         }
         if (key == 'a' || key == 'A') {
             keys[1] = false;
+            ivan.setIvanImages(1);
         }
         if (key == 'd' || key == 'D') {
             keys[2] = false;
+            ivan.setIvanImages(0);
         }
         if (key == 's' || key == 'S') {
             keys[3] = false;
@@ -164,16 +161,21 @@ public class IvanTheRussian extends PApplet {
         switch (level) {
             //test stuff
             case 0:
-                objects.add(new Object(new PVector(size*6, size * 3), "Mine"));
+                objects.add(new Blocks(new PVector(size * 6, size * 3), "Mine"));
                 for (int i = 0; i < 8; i++) {
-                    objects.add(new Object(new PVector(size * i, size * 4), "Plat"));
+                    objects.add(new Blocks(new PVector(size * i, size * 4), "Plat"));
                 }
-                objects.add(new Object(new PVector(size*6, size * 8), "Spike"));
+                objects.add(new Blocks(new PVector(size * 6, size * 8), "Spike"));
                 for (int i = 0; i < 8; i++) {
-                    objects.add(new Object(new PVector(size*i, size * 9), "Plat"));
+                    objects.add(new Blocks(new PVector(size * i, size * 9), "Plat"));
                 }
                 break;
             case 1:
+                objects.clear();
+                objects.addAll(readLevel(level));
+                break;
+            case 2:
+                objects.clear();
                 objects.addAll(readLevel(level));
                 break;
 
@@ -181,11 +183,20 @@ public class IvanTheRussian extends PApplet {
 
     }
 
+    Blocks checkCollide(){
+        Blocks x;
+        for (Blocks object : objects) {
+            x = RectCol.collisionIvan(ivan, object);
+            if (x !=null) return x;
+        }
+        return null;
+    }
+
     static boolean[] getKeys() {
         return keys;
     }
 
-    private ArrayList<Object> readLevel(int level) {
+    private ArrayList<Blocks> readLevel(int level) {
 
         return null;
     }
