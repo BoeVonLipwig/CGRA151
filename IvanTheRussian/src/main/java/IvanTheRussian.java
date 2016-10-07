@@ -229,8 +229,7 @@ public class IvanTheRussian extends PApplet {
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "Earth"));
                     }else if(color.equals(new Color(130,127,0))){
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "BarrenEarth"));
-                    }
-                    else if(color.equals(new Color(76,76,76))){
+                    }else if(color.equals(new Color(76,76,76))){
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "Spike"));
                     }else if(color.equals(new Color(127,0,127))){
                         ivan.setPos(x,y);
