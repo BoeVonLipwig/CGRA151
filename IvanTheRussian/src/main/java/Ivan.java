@@ -87,9 +87,9 @@ class Ivan {
         Blocks x;
         if ((x = IvanTheRussian.instance.checkCollide()) != null) {
             if (acceleration.x > 0) {
-                position.x = x.getPos().x - width;
+                position.x = x.getPos().x - width/2;
             } else {
-                position.x = x.getPos().x + width / 2;
+                position.x = x.getPos().x + width/2;
             }
         }
         position.y += acceleration.y;
@@ -105,11 +105,18 @@ class Ivan {
         acceleration.limit(20);
     }
 
+    boolean getIvanRorL(){
+        return ivan.equals(ivanImages[0]) || ivan.equals(ivanImages[2]);
+    }
+
 
     private void takeDmg(int amount) {
         health -= amount;
         if (health < 0) die();
         else if (health > 10) health = 10;
+    }
+    public void setPos(int x, int y){
+        position=new PVector(x,y);
     }
 
     public void heal(int amount) {

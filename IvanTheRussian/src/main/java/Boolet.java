@@ -1,3 +1,4 @@
+import processing.core.PImage;
 import processing.core.PVector;
 
 /**
@@ -11,6 +12,8 @@ class Boolet {
     private int index;
     //will need to be int if add more ammo types
     private boolean explosive;
+    private IvanTheRussian game = IvanTheRussian.instance;
+    PImage totallyNotBill=game.loadImage("Boolet.png");
 
     Boolet(float x, float y, double speed, boolean explosive) {
         position=new PVector(x,y);

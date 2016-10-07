@@ -11,7 +11,7 @@ public class RectCol {
         double rectY = rect.getPos().y;
         double ivanX = ivan.getPosition().x;
         double ivanY = ivan.getPosition().y;
-        if (ivanX + size * 2 > rectX && ivanX < rectX + size && ivanY + size > rectY && ivanY < rectY + size) {
+        if (ivanX + size > rectX && ivanX < rectX + size && ivanY + size *2 > rectY && ivanY < rectY + size) {
             IvanTheRussian.setJumpAllowed(true);
             return rect;
         }
