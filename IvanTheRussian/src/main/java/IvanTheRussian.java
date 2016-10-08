@@ -40,7 +40,7 @@ public class IvanTheRussian extends PApplet {
     private PImage MineOff;
     private PImage CapitalistScum;
     private PImage transform;
-    private PImage GloryiousMotherRussia;
+    private PImage GloriousMotherRussia;
     //nonSolid blocks
     //I know they have the same sprite but this makes it easier to understand
     private PImage FakeEarth;
@@ -53,7 +53,7 @@ public class IvanTheRussian extends PApplet {
     private static boolean keys[] = {false, false, false, false};
     private ArrayList<Blocks> objects = new ArrayList<>();
     private ArrayList<PImage> flags =new ArrayList<>();
-    private static boolean jumpAllowed = true, fireAllowed=true;
+    private static boolean fireAllowed=true;
 
     public void setup() {
         imageMode(CENTER);
@@ -62,7 +62,7 @@ public class IvanTheRussian extends PApplet {
         bg = loadImage("Background.jpg");
         flags.add(CapitalistScum =loadImage("Goal.png"));
         flags.add(transform=loadImage("HalfChangedFlag.png"));
-        flags.add(GloryiousMotherRussia=loadImage("END.png"));
+        flags.add(GloriousMotherRussia =loadImage("END.png"));
         BreakableWall=loadImage("BreakableWall.png");
         BreakableWall.resize(size*2,size);
         ArrayList<PImage> images = new ArrayList<>();
@@ -85,6 +85,7 @@ public class IvanTheRussian extends PApplet {
             image.resize(size*2, size*2);
         }
         loadLevel(0);
+        bg.resize(width, height);
     }
 
     public void settings() {
@@ -92,8 +93,8 @@ public class IvanTheRussian extends PApplet {
     }
 
     public void draw() {
-//        translate(-ivan.getPosition().x+width/2,-ivan.getPosition().y+height/2);
-        bg.resize(width, height);
+        pushMatrix();
+        translate(-ivan.getPosition().x+width/2,-ivan.getPosition().y+height/2);
         background(bg);
         for (Blocks temp : objects) {
             String type = temp.getType();
@@ -129,17 +130,19 @@ public class IvanTheRussian extends PApplet {
                     break;
             }
         }
-        displayHealth();
         ivan.move();
         drawPlayer();
         drawBoolet();
         if (ivan.checkHealth()){
             death();
         }
+        popMatrix();
+        displayHealth();
+
     }
 
     private void drawPlayer() {
-        if (ivan.getIvanRorL()) image(ivan.getIvan(), ivan.getPosition().x, ivan.getPosition().y + size);
+        if (ivan.facingRight()) image(ivan.getIvan(), ivan.getPosition().x, ivan.getPosition().y + size);
         else image(ivan.getIvan(), ivan.getPosition().x - size, ivan.getPosition().y + size);
     }
 
@@ -172,17 +175,10 @@ public class IvanTheRussian extends PApplet {
         }
     }
 
-    static void setJumpAllowed(boolean setJumpAllowed) {
-        jumpAllowed = setJumpAllowed;
-    }
-
     public void keyPressed() {
         //up
         if (key == 'w' || key == 'W') {
-            if (jumpAllowed) {
-                keys[0] = true;
-                jumpAllowed = false;
-            }
+            keys[0] = true;
         }
         //left
         if (key == 'a' || key == 'A') {
@@ -201,7 +197,7 @@ public class IvanTheRussian extends PApplet {
             ivan.cycleAmmo();
         }if (key == 'e' || key == 'E') {
             if(fireAllowed){
-            ivan.shoot();}
+                ivan.shoot();}
         }
     }
 
@@ -224,7 +220,6 @@ public class IvanTheRussian extends PApplet {
             fireAllowed=true;
         }
     }
-
 
     Blocks checkCollide() {
         Blocks x;
@@ -261,20 +256,24 @@ public class IvanTheRussian extends PApplet {
 
     void WIN(Blocks flag){
         PVector drawPos=flag.getPos();
+        image(transform,drawPos.x,drawPos.y);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        image(GloriousMotherRussia,drawPos.x,drawPos.y);
+
     }
 
     private ArrayList<Blocks> readLevel(String level) {
         Color color;
-//        Color
         ArrayList<Blocks> toReturn = new ArrayList<>();
         try {
             BufferedImage image = ImageIO.read(new File(level));
             for (int x = 0; x < image.getWidth(); x++) {
                 for (int y = 0; y <image.getHeight(); y++) {
                     color = new Color(image.getRGB(x, y));
-                    if (!color.equals(Color.white)) {
-                        System.out.println(color);
-                    }
                     x++;
                     //dint use color names because my ide puts the colors in the margin for me which makes it easier to see
                     if (color.equals(new Color(0,0,0))) {
@@ -313,4 +312,3 @@ public class IvanTheRussian extends PApplet {
 
     }
 }
-

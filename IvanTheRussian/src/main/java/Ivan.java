@@ -12,8 +12,7 @@ class Ivan {
 
     private PVector position, acceleration;
     private int size = IvanTheRussian.size, ivanHeight = size * 2, width = size * 2, health = 10, count = 0;
-    private boolean facingRight = true;
-    private boolean hasExplosive, notDead;
+    private boolean hasExplosive, dead = false;
     private boolean ammoType, spriteChanger;
     private static ArrayList<Boolet> bullets;
     private PImage ivan;
@@ -46,27 +45,25 @@ class Ivan {
     static ArrayList<Boolet> getBullets() {
         return bullets;
     }
-
+    boolean jumpAllowed = false;
     void move() {
-        System.out.println(position.x+"\n"+ position.y);
-        if (notDead) {
-            facingRight = acceleration.x >= 0;
+        if (!dead) {
             boolean[] keys = IvanTheRussian.getKeys();
             double grav = 0.4;
             acceleration.y += grav;
             if (position.y > 600 - ivanHeight) {
                 acceleration.y = 0;
                 position.y = 600 - ivanHeight;
-                IvanTheRussian.setJumpAllowed(true);
+                jumpAllowed = true;
             }
-            if (keys[0]) {
+            if (keys[0] && jumpAllowed) {
                 acceleration.y -= 10;
                 keys[0] = false;
             }
             if (keys[1]) {
                 acceleration.x -= 5;
                 count++;
-                if (count % 3 == 0) {
+                if (count % 10 == 0) {
                     count = 0;
                     spriteChanger = !spriteChanger;
                 }
@@ -76,7 +73,7 @@ class Ivan {
             if (keys[2]) {
                 acceleration.x += 5;
                 count++;
-                if (count % 3 == 0) {
+                if (count % 10 == 0) {
                     count = 0;
                     spriteChanger = !spriteChanger;
                 }
@@ -108,24 +105,28 @@ class Ivan {
                 if (x.isSolid()) {
                     if (acceleration.y > 0) {
                         position.y = x.getPos().y - ivanHeight;
+                        jumpAllowed = true;
                     } else {
                         position.y = x.getPos().y + width / 2;
+                        jumpAllowed = false;
                     }
                     acceleration.y = 0;
                 }
+            } else {
+                jumpAllowed = false;
             }
             acceleration.x = 0;
             acceleration.limit(20);
         }
     }
 
-    boolean getIvanRorL() {
+    boolean facingRight() {
         return ivan.equals(ivanImages[0]) || ivan.equals(ivanImages[2]);
     }
 
     boolean checkHealth() {
         if (health<=0){
-            notDead=true;
+            dead =true;
             return true;
         }
         return false;
@@ -161,8 +162,8 @@ class Ivan {
     }
 
     void shoot() {
-        double speed = 5;
-        if (facingRight) speed =-5;
+        double speed = 10;
+        if (!facingRight()) speed =-10;
         Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
         cur.setIndex(bullets.size());
         bullets.add(cur);
