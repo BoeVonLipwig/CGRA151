@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 
-import static java.awt.Color.*;
-
 /**
  * Created by Shaun Sinclair.
  * CGRA 151.
@@ -31,19 +29,26 @@ public class IvanTheRussian extends PApplet {
     //player(not for hating)
     private Ivan ivan;
     //Images
+    //Solid blocks
     private PImage bg;          //background
-    private PImage Earth;    //ground(dirt)
+    private PImage Earth;       //ground(dirt)
     private PImage BarrenEarth;
     private PImage Wall;
     private PImage Spike;
     private PImage MineOn;
     private PImage MineOff;
+    //nonSolid blocks
+    //I know they have the same sprite but this makes it easier to understand
+    private PImage FakeEarth;
+    //unused yet
+//    private PImage FakeWall;
+//    private PImage FakeBarrenEarth;
     private boolean blip;
     private int mineChanger = 0;
     //Objects
     private static boolean keys[] = {false, false, false, false};
     private ArrayList<Blocks> objects = new ArrayList<>();
-    private static boolean jumpAllowed = true;
+    private static boolean jumpAllowed = true, fireAllowed=true;
 
     public void setup() {
         imageMode(CENTER);
@@ -57,6 +62,9 @@ public class IvanTheRussian extends PApplet {
         images.add(Spike = loadImage("Spikes.png"));
         images.add(MineOn = loadImage("MineOn.png"));
         images.add(MineOff = loadImage("MineOff.png"));
+//        images.add(FakeWall = loadImage("FakeWall.png"));
+        images.add(FakeEarth = loadImage("FakeEarth.png"));
+//        images.add(FakeBarrenEarth=loadImage("FakeBarrenEarth.png"));
         for (PImage image : images) {
             image.resize(size, size);
         }
@@ -75,6 +83,9 @@ public class IvanTheRussian extends PApplet {
             switch (type) {
                 case "Earth":
                     image(Earth, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
+                    break;
+                case "FakeEarth":
+                    image(FakeEarth, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
                 case "BarrenEarth":
                     image(BarrenEarth, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
@@ -98,6 +109,7 @@ public class IvanTheRussian extends PApplet {
         displayHealth();
         ivan.move();
         drawPlayer();
+        drawBoolet();
     }
 
     private void drawPlayer() {
@@ -105,6 +117,13 @@ public class IvanTheRussian extends PApplet {
         else image(ivan.getIvan(), ivan.getPosition().x - size, ivan.getPosition().y + size);
     }
 
+    private void drawBoolet(){
+        ArrayList<Boolet> boolets = Ivan.getBullets();
+        for (Boolet boolet:boolets){
+            boolet.move();
+            image(boolet.totallyNotBill,boolet.getPosition().x,boolet.getPosition().y);
+        }
+    }
 
     private void displayHealth() {
         int hSize = 20;
@@ -154,6 +173,8 @@ public class IvanTheRussian extends PApplet {
         //change ammo
         if (key == 'q' || key == 'Q') {
             ivan.cycleAmmo();
+        }if (key == 'e' || key == 'E') {
+            ivan.shoot();
         }
     }
 
@@ -171,7 +192,9 @@ public class IvanTheRussian extends PApplet {
         }
         if (key == 's' || key == 'S') {
             keys[3] = false;
-            System.out.println("S");
+        }
+        if (key == 'e' || key == 'E') {
+            fireAllowed=true;
         }
     }
 
@@ -190,6 +213,7 @@ public class IvanTheRussian extends PApplet {
     }
 
     private void loadLevel(int level) {
+        ivan.heal(10);
         switch (level) {
             //test stuff
             case 0:
@@ -221,21 +245,24 @@ public class IvanTheRussian extends PApplet {
                         System.out.println(color);
                     }
                     x++;
-                    if (color.equals(black)) {
+                    //dint use color names because my ide puts the colors in the margin for me which makes it easier to see
+                    if (color.equals(new Color(0,0,0))) {
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "Wall"));
-                    }else if(color.equals(red)){
+                    }else if(color.equals(new Color(255,0,0))){
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "Mine"));
-                    }else if(color.equals(green)){
+                    }else if(color.equals(new Color(0,255,0))){
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "Earth"));
                     }else if(color.equals(new Color(130,127,0))){
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "BarrenEarth"));
                     }else if(color.equals(new Color(76,76,76))){
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "Spike"));
+                    }else if(color.equals(new Color(0,0,255))){
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "FakeEarth"));
+                    }else if(color.equals(new Color(255,255,23))){
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Flag"));
                     }else if(color.equals(new Color(127,0,127))){
                         ivan.setPos(x,y);
-                    }/*else if(color.equals(blue)){
-                    for any other blocks i want
-                    }*/
+                    }
                     x--;
                 }
 

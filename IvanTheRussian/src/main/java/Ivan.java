@@ -11,7 +11,7 @@ import java.util.ArrayList;
 class Ivan {
 
     private PVector position, acceleration;
-    private int size = IvanTheRussian.size, ivanHeight = size * 2, width = size * 2,health = 10, count = 0;;
+    private int size = IvanTheRussian.size, ivanHeight = size * 2, width = size * 2, health = 10, count = 0;
     private boolean facingRight = true;
     private boolean hasExplosive;
     private boolean ammoType, spriteChanger;
@@ -39,8 +39,12 @@ class Ivan {
         ivan = ivanImages[0];
     }
 
-    public void setIvanImages(int index) {
-        ivan=ivanImages[index];
+    void setIvanImages(int index) {
+        ivan = ivanImages[index];
+    }
+
+    static ArrayList<Boolet> getBullets() {
+        return bullets;
     }
 
     void move() {
@@ -87,25 +91,30 @@ class Ivan {
         Blocks x;
         if ((x = IvanTheRussian.instance.checkCollide()) != null) {
             if (acceleration.x > 0) {
-                position.x = x.getPos().x - width/2;
+                position.x = x.getPos().x - width / 2;
             } else {
-                position.x = x.getPos().x + width/2;
+                position.x = x.getPos().x + width / 2;
             }
         }
         position.y += acceleration.y;
         if ((x = IvanTheRussian.instance.checkCollide()) != null) {
-            if (acceleration.y > 0) {
-                position.y = x.getPos().y - ivanHeight;
-            } else {
-                position.y = x.getPos().y + width / 2;
+            if (x.isDoesDMG()) {
+                takeDmg(2);
             }
-            acceleration.y=0;
+            if (x.isSolid()) {
+                if (acceleration.y > 0) {
+                    position.y = x.getPos().y - ivanHeight;
+                } else {
+                    position.y = x.getPos().y + width / 2;
+                }
+                acceleration.y = 0;
+            }
         }
         acceleration.x = 0;
         acceleration.limit(20);
     }
 
-    boolean getIvanRorL(){
+    boolean getIvanRorL() {
         return ivan.equals(ivanImages[0]) || ivan.equals(ivanImages[2]);
     }
 
@@ -115,11 +124,12 @@ class Ivan {
         if (health < 0) die();
         else if (health > 10) health = 10;
     }
-    public void setPos(int x, int y){
-        position=new PVector(x,y);
+
+    void setPos(int x, int y) {
+        position = new PVector(x, y);
     }
 
-    public void heal(int amount) {
+    void heal(int amount) {
         takeDmg(-amount);
     }
 
@@ -138,7 +148,7 @@ class Ivan {
         bullets.remove(index);
     }
 
-    public void Shoot() {
+    void shoot() {
         double speed = -5;
         if (facingRight) speed *= -1;
         Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
@@ -150,9 +160,9 @@ class Ivan {
         return position;
     }
 
-    PVector getAcl() {
-        return acceleration;
-    }
+//    PVector getAcl() {
+//        return acceleration;
+//    }
 
     PImage getIvan() {
         return ivan;

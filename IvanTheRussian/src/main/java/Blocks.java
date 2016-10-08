@@ -1,5 +1,7 @@
 import processing.core.PVector;
 
+import java.util.Objects;
+
 /**
  * Created by Shaun Sinclair.
  * CGRA 151.
@@ -8,10 +10,26 @@ import processing.core.PVector;
 class Blocks {
     private PVector pos;
     private String type;
+    private boolean doesDMG;
+    private boolean solid;
 
     Blocks(PVector pos, String type) {
         this.pos = pos;
         this.type = type;
+        setTypes();
+    }
+
+    private void setTypes(){
+        doesDMG = Objects.equals(type, "Spike") || Objects.equals(type, "Mine");
+        solid = !(type.equals("Mine") || type.equals("FakeEarth") || type.equals("FakeBarrenEarth") || type.equals("FakeWall"));
+    }
+
+    boolean isSolid() {
+        return solid;
+    }
+
+    boolean isDoesDMG() {
+        return doesDMG;
     }
 
     PVector getPos() {
