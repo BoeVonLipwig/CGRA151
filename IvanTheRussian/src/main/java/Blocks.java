@@ -21,7 +21,7 @@ class Blocks {
 
     private void setTypes(){
         doesDMG = Objects.equals(type, "Spike") || Objects.equals(type, "Mine");
-        solid = !(type.equals("Mine") || type.equals("FakeEarth") || type.equals("FakeBarrenEarth") || type.equals("FakeWall"));
+        solid = !(type.equals("Mine") || type.equals("FakeEarth") || type.equals("FakeBarrenEarth") || type.equals("FakeWall")||type.equals("Flag"));
     }
 
     boolean isSolid() {

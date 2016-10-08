@@ -33,10 +33,14 @@ public class IvanTheRussian extends PApplet {
     private PImage bg;          //background
     private PImage Earth;       //ground(dirt)
     private PImage BarrenEarth;
+    private PImage BreakableWall;
     private PImage Wall;
     private PImage Spike;
     private PImage MineOn;
     private PImage MineOff;
+    private PImage CapitalistScum;
+    private PImage transform;
+    private PImage GloryiousMotherRussia;
     //nonSolid blocks
     //I know they have the same sprite but this makes it easier to understand
     private PImage FakeEarth;
@@ -48,6 +52,7 @@ public class IvanTheRussian extends PApplet {
     //Objects
     private static boolean keys[] = {false, false, false, false};
     private ArrayList<Blocks> objects = new ArrayList<>();
+    private ArrayList<PImage> flags =new ArrayList<>();
     private static boolean jumpAllowed = true, fireAllowed=true;
 
     public void setup() {
@@ -55,7 +60,16 @@ public class IvanTheRussian extends PApplet {
         instance = this;
         ivan = new Ivan(new PVector(size, size), false);
         bg = loadImage("Background.jpg");
+        flags.add(CapitalistScum =loadImage("Goal.png"));
+        flags.add(transform=loadImage("HalfChangedFlag.png"));
+        flags.add(GloryiousMotherRussia=loadImage("END.png"));
+        BreakableWall=loadImage("BreakableWall.png");
+        BreakableWall.resize(size*2,size);
         ArrayList<PImage> images = new ArrayList<>();
+        ArrayList<PImage> images2 = new ArrayList<>();
+        images2.add(CapitalistScum =loadImage("Goal.png"));
+        images2.add(CapitalistScum =loadImage("HalfChangedFlag.png"));
+        images2.add(CapitalistScum =loadImage("END.png"));
         images.add(Wall = loadImage("Wall.png"));
         images.add(Earth = loadImage("Earth.png"));
         images.add(BarrenEarth=loadImage("BarrenEarth.png"));
@@ -67,6 +81,8 @@ public class IvanTheRussian extends PApplet {
 //        images.add(FakeBarrenEarth=loadImage("FakeBarrenEarth.png"));
         for (PImage image : images) {
             image.resize(size, size);
+        }for (PImage image : images2) {
+            image.resize(size*2, size*2);
         }
         loadLevel(0);
     }
@@ -76,11 +92,15 @@ public class IvanTheRussian extends PApplet {
     }
 
     public void draw() {
+//        translate(-ivan.getPosition().x+width/2,-ivan.getPosition().y+height/2);
         bg.resize(width, height);
         background(bg);
         for (Blocks temp : objects) {
             String type = temp.getType();
             switch (type) {
+                case "Flag":
+                    image(flags.get(0), temp.getPos().x - size / 2, temp.getPos().y + size / 2);
+                    break;
                 case "Earth":
                     image(Earth, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
@@ -104,12 +124,18 @@ public class IvanTheRussian extends PApplet {
                     if (blip) image(MineOn, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     else image(MineOff, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
+                case "BreakableWall":
+                    image(BreakableWall, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
+                    break;
             }
         }
         displayHealth();
         ivan.move();
         drawPlayer();
         drawBoolet();
+        if (ivan.checkHealth()){
+            death();
+        }
     }
 
     private void drawPlayer() {
@@ -174,7 +200,8 @@ public class IvanTheRussian extends PApplet {
         if (key == 'q' || key == 'Q') {
             ivan.cycleAmmo();
         }if (key == 'e' || key == 'E') {
-            ivan.shoot();
+            if(fireAllowed){
+            ivan.shoot();}
         }
     }
 
@@ -217,7 +244,7 @@ public class IvanTheRussian extends PApplet {
         switch (level) {
             //test stuff
             case 0:
-                objects.addAll(readLevel("levelSize.png"));
+                objects.addAll(readLevel("test.png"));
                 break;
             case 1:
                 objects.clear();
@@ -230,6 +257,10 @@ public class IvanTheRussian extends PApplet {
 
         }
 
+    }
+
+    void WIN(Blocks flag){
+        PVector drawPos=flag.getPos();
     }
 
     private ArrayList<Blocks> readLevel(String level) {
@@ -260,6 +291,8 @@ public class IvanTheRussian extends PApplet {
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "FakeEarth"));
                     }else if(color.equals(new Color(255,255,23))){
                         toReturn.add(new Blocks(new PVector(size * x, size * y), "Flag"));
+                    }else if(color.equals(new Color(23,255,83))){
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BreakableWall"));
                     }else if(color.equals(new Color(127,0,127))){
                         ivan.setPos(x,y);
                     }
@@ -272,6 +305,12 @@ public class IvanTheRussian extends PApplet {
         }
         toReturn.add(new Blocks(new PVector(2, 2), "Earth"));
         return toReturn;
+    }
+
+    private void death(){
+        objects.clear();
+//        bg=loadImage("You have failed.png");
+
     }
 }
 

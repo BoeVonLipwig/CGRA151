@@ -20,6 +20,7 @@ class Boolet {
         original = position;
         this.speed = speed;
         this.explosive = explosive;
+        totallyNotBill.resize(15,15);
         if (!explosive) {
             allowed = 300;
         } else {

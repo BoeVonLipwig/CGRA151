@@ -13,7 +13,7 @@ class Ivan {
     private PVector position, acceleration;
     private int size = IvanTheRussian.size, ivanHeight = size * 2, width = size * 2, health = 10, count = 0;
     private boolean facingRight = true;
-    private boolean hasExplosive;
+    private boolean hasExplosive, notDead;
     private boolean ammoType, spriteChanger;
     private static ArrayList<Boolet> bullets;
     private PImage ivan;
@@ -48,76 +48,88 @@ class Ivan {
     }
 
     void move() {
-        facingRight = acceleration.x >= 0;
-        boolean[] keys = IvanTheRussian.getKeys();
-        double grav = 0.4;
-        acceleration.y += grav;
-        if (position.y > 600 - ivanHeight) {
-            acceleration.y = 0;
-            position.y = 600 - ivanHeight;
-            IvanTheRussian.setJumpAllowed(true);
-        }
-
-//            die();
-//            return;
-        if (keys[0]) {
-            acceleration.y -= 10;
-            keys[0] = false;
-        }
-        if (keys[1]) {
-            acceleration.x -= 5;
-            count++;
-            if (count % 3 == 0) {
-                count = 0;
-                spriteChanger = !spriteChanger;
-            }
-            if (spriteChanger) ivan = ivanImages[3];
-            else ivan = ivanImages[1];
-        }
-        if (keys[2]) {
-            acceleration.x += 5;
-            count++;
-            if (count % 3 == 0) {
-                count = 0;
-                spriteChanger = !spriteChanger;
-            }
-            if (spriteChanger) ivan = ivanImages[2];
-            else ivan = ivanImages[0];
-        }
-        if (keys[3]) {
-            acceleration.y += 1;
-        }
-        position.x += acceleration.x;
-        Blocks x;
-        if ((x = IvanTheRussian.instance.checkCollide()) != null) {
-            if (acceleration.x > 0) {
-                position.x = x.getPos().x - width / 2;
-            } else {
-                position.x = x.getPos().x + width / 2;
-            }
-        }
-        position.y += acceleration.y;
-        if ((x = IvanTheRussian.instance.checkCollide()) != null) {
-            if (x.isDoesDMG()) {
-                takeDmg(2);
-            }
-            if (x.isSolid()) {
-                if (acceleration.y > 0) {
-                    position.y = x.getPos().y - ivanHeight;
-                } else {
-                    position.y = x.getPos().y + width / 2;
-                }
+        System.out.println(position.x+"\n"+ position.y);
+        if (notDead) {
+            facingRight = acceleration.x >= 0;
+            boolean[] keys = IvanTheRussian.getKeys();
+            double grav = 0.4;
+            acceleration.y += grav;
+            if (position.y > 600 - ivanHeight) {
                 acceleration.y = 0;
+                position.y = 600 - ivanHeight;
+                IvanTheRussian.setJumpAllowed(true);
             }
+            if (keys[0]) {
+                acceleration.y -= 10;
+                keys[0] = false;
+            }
+            if (keys[1]) {
+                acceleration.x -= 5;
+                count++;
+                if (count % 3 == 0) {
+                    count = 0;
+                    spriteChanger = !spriteChanger;
+                }
+                if (spriteChanger) ivan = ivanImages[3];
+                else ivan = ivanImages[1];
+            }
+            if (keys[2]) {
+                acceleration.x += 5;
+                count++;
+                if (count % 3 == 0) {
+                    count = 0;
+                    spriteChanger = !spriteChanger;
+                }
+                if (spriteChanger) ivan = ivanImages[2];
+                else ivan = ivanImages[0];
+            }
+            if (keys[3]) {
+                acceleration.y += 1;
+            }
+            Blocks x;
+            if ((x=IvanTheRussian.instance.checkCollide()) != null){
+                if(x.getType().equals("Flag")){
+                    IvanTheRussian.instance.WIN(x);
+                }
+            }
+            position.x += acceleration.x;
+            if ((x = IvanTheRussian.instance.checkCollide()) != null) {
+                if (acceleration.x > 0) {
+                    position.x = x.getPos().x - width / 2;
+                } else {
+                    position.x = x.getPos().x + width / 2;
+                }
+            }
+            position.y += acceleration.y;
+            if ((x = IvanTheRussian.instance.checkCollide()) != null) {
+                if (x.isDoesDMG()) {
+                    takeDmg(2);
+                }
+                if (x.isSolid()) {
+                    if (acceleration.y > 0) {
+                        position.y = x.getPos().y - ivanHeight;
+                    } else {
+                        position.y = x.getPos().y + width / 2;
+                    }
+                    acceleration.y = 0;
+                }
+            }
+            acceleration.x = 0;
+            acceleration.limit(20);
         }
-        acceleration.x = 0;
-        acceleration.limit(20);
     }
 
     boolean getIvanRorL() {
         return ivan.equals(ivanImages[0]) || ivan.equals(ivanImages[2]);
     }
 
+    boolean checkHealth() {
+        if (health<=0){
+            notDead=true;
+            return true;
+        }
+        return false;
+    }
 
     private void takeDmg(int amount) {
         health -= amount;
@@ -149,8 +161,8 @@ class Ivan {
     }
 
     void shoot() {
-        double speed = -5;
-        if (facingRight) speed *= -1;
+        double speed = 5;
+        if (facingRight) speed =-5;
         Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
         cur.setIndex(bullets.size());
         bullets.add(cur);
