@@ -12,7 +12,7 @@ class Blocks {
     private String type;
     private boolean doesDMG;
     private boolean solid;
-    int index;
+    private int index;
 
     Blocks(PVector pos, String type, int index) {
         this.pos = pos;
@@ -26,8 +26,8 @@ class Blocks {
         solid = !(type.equals("Mine") || type.equals("FakeEarth") || type.equals("FakeBarrenEarth") || type.equals("FakeWall")||type.equals("Flag"));
     }
 
-    public void remove(){
-
+    int getIndex(){
+        return index;
     }
 
     boolean isSolid() {

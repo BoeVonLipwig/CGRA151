@@ -45,7 +45,7 @@ class Ivan {
     static ArrayList<Boolet> getBullets() {
         return bullets;
     }
-    boolean jumpAllowed = false;
+    private boolean jumpAllowed = false;
     void move() {
         if (!dead) {
             boolean[] keys = IvanTheRussian.getKeys();

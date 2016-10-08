@@ -38,7 +38,6 @@ public class IvanTheRussian extends PApplet {
     private PImage Spike;
     private PImage MineOn;
     private PImage MineOff;
-    private PImage CapitalistScum;
     private PImage Transform;
     private PImage GloriousMotherRussia;
     //nonSolid blocks
@@ -65,7 +64,8 @@ public class IvanTheRussian extends PApplet {
         BreakableWall.resize(size,size*2);
         ArrayList<PImage> images = new ArrayList<>();
         ArrayList<PImage> images2 = new ArrayList<>();
-        images2.add(CapitalistScum =loadImage("Goal.png"));
+        PImage capitalistScum;
+        images2.add(capitalistScum =loadImage("Goal.png"));
         images2.add(Transform =loadImage("HalfChangedFlag.png"));
         images2.add(GloriousMotherRussia =loadImage("END.png"));
         images.add(Wall = loadImage("Wall.png"));
@@ -82,7 +82,7 @@ public class IvanTheRussian extends PApplet {
         }for (PImage image : images2) {
             image.resize(size*2, size*2);
         }
-        flags.add(CapitalistScum);
+        flags.add(capitalistScum);
         flags.add(Transform);
         flags.add(GloriousMotherRussia);
         loadLevel(1);
@@ -153,6 +153,10 @@ public class IvanTheRussian extends PApplet {
             boolet.move();
             image(boolet.totallyNotBill,boolet.getPosition().x,boolet.getPosition().y+10);
         }
+    }
+
+    void removeObjects(int index){
+        objects.remove(index);
     }
 
     private void displayHealth() {
