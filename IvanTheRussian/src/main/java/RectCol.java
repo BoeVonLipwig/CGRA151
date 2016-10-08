@@ -18,7 +18,7 @@ class RectCol {
     }
 
 
-    public static Blocks collisionBullet(Boolet bullet, Blocks rect) {
+    static Blocks collisionBoolet(Boolet bullet, Blocks rect) {
         double rectX = rect.getPos().x;
         double rectY = rect.getPos().y;
         double BooletX = bullet.getPosition().x;

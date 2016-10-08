@@ -1,0 +1,7 @@
+Black = Wall
+Green = Earth
+Blue = Fake Earth
+Brown = Barren Earth
+Red = Mine
+Grey = Spike
+Purple = Ivan

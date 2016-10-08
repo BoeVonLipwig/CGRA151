@@ -16,7 +16,7 @@ class Ivan {
     private boolean ammoType, spriteChanger;
     private static ArrayList<Boolet> bullets;
     private PImage ivan;
-    private PImage[] ivanImages = {null, null, null, null};
+    private PImage[] ivanImages = new PImage[4];
 
     Ivan(PVector position, boolean hasExplosive) {
         this.position = position;
@@ -51,11 +51,11 @@ class Ivan {
             boolean[] keys = IvanTheRussian.getKeys();
             double grav = 0.4;
             acceleration.y += grav;
-            if (position.y > 600 - ivanHeight) {
-                acceleration.y = 0;
-                position.y = 600 - ivanHeight;
-                jumpAllowed = true;
-            }
+//            if (position.y > 600 - ivanHeight) {
+//                acceleration.y = 0;
+//                position.y = 600 - ivanHeight;
+//                jumpAllowed = true;
+//            }
             if (keys[0] && jumpAllowed) {
                 acceleration.y -= 10;
                 keys[0] = false;
@@ -90,7 +90,11 @@ class Ivan {
                 }
             }
             position.x += acceleration.x;
-            if ((x = IvanTheRussian.instance.checkCollide()) != null) {
+            if ((x = IvanTheRussian.instance.checkCollide()) != null/*&&!x.isSolid()*/) {
+                if (x.isDoesDMG()) {
+                    position=IvanTheRussian.instance.startPoint;
+                    takeDmg(1);
+                }
                 if (acceleration.x > 0) {
                     position.x = x.getPos().x - width / 2;
                 } else {
@@ -98,9 +102,10 @@ class Ivan {
                 }
             }
             position.y += acceleration.y;
-            if ((x = IvanTheRussian.instance.checkCollide()) != null) {
+            if ((x = IvanTheRussian.instance.checkCollide()) != null/*&&!x.isSolid()*/) {
                 if (x.isDoesDMG()) {
-                    takeDmg(2);
+                    position=IvanTheRussian.instance.startPoint;
+                    takeDmg(1);
                 }
                 if (x.isSolid()) {
                     if (acceleration.y > 0) {
@@ -179,6 +184,12 @@ class Ivan {
 
     PImage getIvan() {
         return ivan;
+    }
+
+    public void booletHit(){
+        for(Boolet boolet:bullets){
+            IvanTheRussian.instance.checkHit(boolet);
+        }
     }
 
     void die() {

@@ -39,7 +39,7 @@ public class IvanTheRussian extends PApplet {
     private PImage MineOn;
     private PImage MineOff;
     private PImage CapitalistScum;
-    private PImage transform;
+    private PImage Transform;
     private PImage GloriousMotherRussia;
     //nonSolid blocks
     //I know they have the same sprite but this makes it easier to understand
@@ -48,6 +48,7 @@ public class IvanTheRussian extends PApplet {
 //    private PImage FakeWall;
 //    private PImage FakeBarrenEarth;
     private boolean blip;
+    PVector startPoint;
     private int mineChanger = 0;
     //Objects
     private static boolean keys[] = {false, false, false, false};
@@ -58,18 +59,15 @@ public class IvanTheRussian extends PApplet {
     public void setup() {
         imageMode(CENTER);
         instance = this;
-        ivan = new Ivan(new PVector(size, size), false);
+        ivan = new Ivan(new PVector(size,size), false);
         bg = loadImage("Background.jpg");
-        flags.add(CapitalistScum =loadImage("Goal.png"));
-        flags.add(transform=loadImage("HalfChangedFlag.png"));
-        flags.add(GloriousMotherRussia =loadImage("END.png"));
         BreakableWall=loadImage("BreakableWall.png");
-        BreakableWall.resize(size*2,size);
+        BreakableWall.resize(size,size*2);
         ArrayList<PImage> images = new ArrayList<>();
         ArrayList<PImage> images2 = new ArrayList<>();
         images2.add(CapitalistScum =loadImage("Goal.png"));
-        images2.add(CapitalistScum =loadImage("HalfChangedFlag.png"));
-        images2.add(CapitalistScum =loadImage("END.png"));
+        images2.add(Transform =loadImage("HalfChangedFlag.png"));
+        images2.add(GloriousMotherRussia =loadImage("END.png"));
         images.add(Wall = loadImage("Wall.png"));
         images.add(Earth = loadImage("Earth.png"));
         images.add(BarrenEarth=loadImage("BarrenEarth.png"));
@@ -84,7 +82,10 @@ public class IvanTheRussian extends PApplet {
         }for (PImage image : images2) {
             image.resize(size*2, size*2);
         }
-        loadLevel(0);
+        flags.add(CapitalistScum);
+        flags.add(Transform);
+        flags.add(GloriousMotherRussia);
+        loadLevel(1);
         bg.resize(width, height);
     }
 
@@ -126,7 +127,7 @@ public class IvanTheRussian extends PApplet {
                     else image(MineOff, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
                 case "BreakableWall":
-                    image(BreakableWall, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
+                    image(BreakableWall, temp.getPos().x - size / 2, temp.getPos().y + size );
                     break;
             }
         }
@@ -150,7 +151,7 @@ public class IvanTheRussian extends PApplet {
         ArrayList<Boolet> boolets = Ivan.getBullets();
         for (Boolet boolet:boolets){
             boolet.move();
-            image(boolet.totallyNotBill,boolet.getPosition().x,boolet.getPosition().y);
+            image(boolet.totallyNotBill,boolet.getPosition().x,boolet.getPosition().y+10);
         }
     }
 
@@ -221,6 +222,16 @@ public class IvanTheRussian extends PApplet {
         }
     }
 
+    Blocks checkHit(Boolet boolet){
+        Blocks x;
+        for (Blocks object : objects) {
+            x = RectCol.collisionBoolet(boolet, object);
+            if (x != null) return x;
+        }
+        return null;
+    }
+
+
     Blocks checkCollide() {
         Blocks x;
         for (Blocks object : objects) {
@@ -256,7 +267,7 @@ public class IvanTheRussian extends PApplet {
 
     void WIN(Blocks flag){
         PVector drawPos=flag.getPos();
-        image(transform,drawPos.x,drawPos.y);
+        image(Transform,drawPos.x,drawPos.y);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -277,23 +288,23 @@ public class IvanTheRussian extends PApplet {
                     x++;
                     //dint use color names because my ide puts the colors in the margin for me which makes it easier to see
                     if (color.equals(new Color(0,0,0))) {
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Wall"));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Wall",toReturn.size()));
                     }else if(color.equals(new Color(255,0,0))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Mine"));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Mine",toReturn.size()));
                     }else if(color.equals(new Color(0,255,0))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Earth"));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Earth",toReturn.size()));
                     }else if(color.equals(new Color(130,127,0))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BarrenEarth"));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BarrenEarth",toReturn.size()));
                     }else if(color.equals(new Color(76,76,76))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Spike"));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Spike",toReturn.size()));
                     }else if(color.equals(new Color(0,0,255))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "FakeEarth"));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "FakeEarth",toReturn.size()));
                     }else if(color.equals(new Color(255,255,23))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Flag"));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Flag",toReturn.size()));
                     }else if(color.equals(new Color(23,255,83))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BreakableWall"));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BreakableWall",toReturn.size()));
                     }else if(color.equals(new Color(127,0,127))){
-                        ivan.setPos(x,y);
+                        startPoint=new PVector(x,y);
                     }
                     x--;
                 }
@@ -302,7 +313,6 @@ public class IvanTheRussian extends PApplet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        toReturn.add(new Blocks(new PVector(2, 2), "Earth"));
         return toReturn;
     }
 
