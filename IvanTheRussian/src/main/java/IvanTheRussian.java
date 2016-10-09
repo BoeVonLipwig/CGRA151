@@ -59,7 +59,7 @@ public class IvanTheRussian extends PApplet {
         imageMode(CENTER);
         instance = this;
         ivan = new Ivan(new PVector(size,size), false);
-        bg = loadImage("Background.jpg");
+        bg = loadImage("background.png");
         BreakableWall=loadImage("BreakableWall.png");
         BreakableWall.resize(size,size*2);
         ArrayList<PImage> images = new ArrayList<>();
@@ -149,9 +149,9 @@ public class IvanTheRussian extends PApplet {
 
     private void drawBoolet(){
         ArrayList<Boolet> boolets = Ivan.getBullets();
-        for (Boolet boolet:boolets){
-            boolet.move();
-            image(boolet.totallyNotBill,boolet.getPosition().x,boolet.getPosition().y+10);
+        for (int i = 0; i < boolets.size(); i++) {
+            image(boolets.get(i).totallyNotBill,boolets.get(i).getPosition().x,boolets.get(i).getPosition().y+10);
+            boolets.get(i).move();
         }
     }
 

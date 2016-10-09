@@ -43,13 +43,13 @@ class Boolet {
     }
 
     void move() {
-        position.x += speed;
         Blocks x;
         if ((x = IvanTheRussian.instance.checkHit(this)) != null) {
             if(x.getType().equals("BreakableWall")){
                 IvanTheRussian.instance.removeObjects(x.getIndex());
             }
             Ivan.removeBullet(index);
+            return;
         }
         position.x += speed;
     }

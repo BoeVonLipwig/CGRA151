@@ -45,7 +45,9 @@ class Ivan {
     static ArrayList<Boolet> getBullets() {
         return bullets;
     }
+
     private boolean jumpAllowed = false;
+
     void move() {
         if (!dead) {
             boolean[] keys = IvanTheRussian.getKeys();
@@ -84,15 +86,15 @@ class Ivan {
                 acceleration.y += 1;
             }
             Blocks x;
-            if ((x=IvanTheRussian.instance.checkCollide()) != null){
-                if(x.getType().equals("Flag")){
+            if ((x = IvanTheRussian.instance.checkCollide()) != null) {
+                if (x.getType().equals("Flag")) {
                     IvanTheRussian.instance.WIN(x);
                 }
             }
             position.x += acceleration.x;
             if ((x = IvanTheRussian.instance.checkCollide()) != null/*&&!x.isSolid()*/) {
                 if (x.isDoesDMG()) {
-                    position=IvanTheRussian.instance.startPoint;
+                    position = IvanTheRussian.instance.startPoint;
                     takeDmg(1);
                 }
                 if (acceleration.x > 0) {
@@ -104,7 +106,7 @@ class Ivan {
             position.y += acceleration.y;
             if ((x = IvanTheRussian.instance.checkCollide()) != null/*&&!x.isSolid()*/) {
                 if (x.isDoesDMG()) {
-                    position=IvanTheRussian.instance.startPoint;
+                    position = IvanTheRussian.instance.startPoint;
                     takeDmg(1);
                 }
                 if (x.isSolid()) {
@@ -130,8 +132,8 @@ class Ivan {
     }
 
     boolean checkHealth() {
-        if (health<=0){
-            dead =true;
+        if (health <= 0) {
+            dead = true;
             return true;
         }
         return false;
@@ -163,12 +165,14 @@ class Ivan {
     }
 
     static void removeBullet(int index) {
-        bullets.remove(index);
+        if (!bullets.isEmpty()) {
+            bullets.remove(index);
+        }
     }
 
     void shoot() {
         double speed = 10;
-        if (!facingRight()) speed =-10;
+        if (!facingRight()) speed = -10;
         Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
         cur.setIndex(bullets.size());
         bullets.add(cur);
@@ -186,8 +190,8 @@ class Ivan {
         return ivan;
     }
 
-    public void booletHit(){
-        for(Boolet boolet:bullets){
+    public void booletHit() {
+        for (Boolet boolet : bullets) {
             IvanTheRussian.instance.checkHit(boolet);
         }
     }
