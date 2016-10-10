@@ -42,7 +42,7 @@ public class IvanTheRussian extends PApplet {
     private PImage FakeWall;
     private PImage FakeEarth;
     private PImage FakeBarrenEarth;
-    boolean credits = false;
+    private boolean credits = false;
     private int levelWidth;
     private int levelHeight;
     @SuppressWarnings("FieldCanBeLocal")
@@ -246,6 +246,14 @@ public class IvanTheRussian extends PApplet {
                 ivan.shoot();
             }
         }
+        if (key == 't' || key == 'T') {
+            int x=ivan.getJumpHeight();
+            if(x == 10){
+                ivan.setJumpHeight(30);
+            }else{
+                ivan.setJumpHeight(10);
+            }
+        }
     }
 
     public void keyReleased() {
@@ -311,13 +319,13 @@ public class IvanTheRussian extends PApplet {
                 objects.addAll(readLevel("level1.png"));
                 break;
             case 2:
-                objects.addAll(readLevel("test.png"));
+                objects.addAll(readLevel("level2.png"));
                 break;
             case 3:
-                credits = true;
+                objects.addAll(readLevel("level3.png"));
                 break;
             case 4:
-                objects.addAll(readLevel("level3.png"));
+                credits = true;
                 break;
 
         }
