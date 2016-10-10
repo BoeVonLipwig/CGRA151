@@ -11,7 +11,7 @@ class RectCol {
         double rectY = rect.getPos().y;
         double ivanX = ivan.getPosition().x;
         double ivanY = ivan.getPosition().y;
-        if (!rect.getType().equals("Mine")||!rect.getType().equals("Flag")) {
+        if (!rect.getType().equals("Mine")&&!rect.getType().equals("Flag")) {
             if (!rect.isSolid()) return null;
         }
         if (ivanX + size > rectX && ivanX < rectX + size && ivanY + size * 2 > rectY && ivanY < rectY + size) {

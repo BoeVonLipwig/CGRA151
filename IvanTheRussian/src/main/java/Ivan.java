@@ -53,7 +53,8 @@ class Ivan {
             double grav = 0.4;
             acceleration.y += grav;
             if (keys[0] && jumpAllowed) {
-                acceleration.y -= 10;
+                //TODO: Change this back to 10.
+                acceleration.y -= 30;
                 keys[0] = false;
             }
             if (keys[1]) {
@@ -80,22 +81,21 @@ class Ivan {
                 acceleration.y += 1;
             }
             Blocks x;
-            if ((x = IvanTheRussian.instance.checkCollide()) != null) {
-                if (x.getType().equals("Flag")) {
-                    IvanTheRussian.instance.WIN();
-                }
-            }
             position.x += acceleration.x;
             if ((x = IvanTheRussian.instance.checkCollide()) != null) {
                 if (x.isDoesDMG()) {
-                    position = IvanTheRussian.instance.startPoint;
-
+                    position = IvanTheRussian.instance.startPoint.copy();
                     takeDmg(1);
                 }
-                if (acceleration.x > 0) {
-                    position.x = x.getPos().x - width / 2;
-                } else {
-                    position.x = x.getPos().x + width / 2;
+                if (x.getType().equals("Flag")) {
+                    IvanTheRussian.instance.WIN();
+                }
+                if (x.isSolid()) {
+                    if (acceleration.x > 0) {
+                        position.x = x.getPos().x - width / 2;
+                    } else {
+                        position.x = x.getPos().x + width / 2;
+                    }
                 }
             }
             position.y += acceleration.y;
@@ -103,6 +103,9 @@ class Ivan {
                 if (x.isDoesDMG()) {
                     position = IvanTheRussian.instance.startPoint.copy();
                     takeDmg(1);
+                }
+                if (x.getType().equals("Flag")) {
+                    IvanTheRussian.instance.WIN();
                 }
                 if (x.isSolid()) {
                     if (acceleration.y > 0) {
