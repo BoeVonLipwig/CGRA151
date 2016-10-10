@@ -17,6 +17,7 @@ class Ivan {
     private static ArrayList<Boolet> bullets;
     private PImage ivan;
     private PImage[] ivanImages = new PImage[4];
+    private int frameCountOld=IvanTheRussian.instance.frameCount;
 
     Ivan(PVector position, boolean hasExplosive) {
         this.position = position;
@@ -141,8 +142,7 @@ class Ivan {
 
     private void takeDmg(int amount) {
         health -= amount;
-        if (health < 0) die();
-        else if (health > 10) health = 10;
+        if (health > 10) health = 10;
     }
 
     void setPos(PVector set) {
@@ -169,10 +169,13 @@ class Ivan {
     }
 
     void shoot() {
-        double speed = 10;
-        if (!facingRight()) speed = -10;
-        Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
-        bullets.add(cur);
+        if(IvanTheRussian.instance.frameCount-frameCountOld>(IvanTheRussian.instance.frameRate/3)*2) {
+            double speed = 10;
+            if (!facingRight()) speed = -10;
+            Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
+            bullets.add(cur);
+            frameCountOld=IvanTheRussian.instance.frameCount;
+        }
     }
 
     PVector getPosition() {
@@ -183,7 +186,4 @@ class Ivan {
         return ivan;
     }
 
-    void die() {
-
-    }
 }

@@ -24,6 +24,7 @@ class RectCol {
         double rectY = rect.getPos().y;
         double BooletX = bullet.getPosition().x;
         double BooletY = bullet.getPosition().y;
+        if (!rect.isSolid())return null;
         if (BooletX + size * 2 > rectX && BooletX < rectX + size && BooletY + size > rectY && BooletY < rectY + size) {
             return rect;
         }

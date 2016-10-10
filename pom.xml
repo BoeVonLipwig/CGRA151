@@ -16,11 +16,18 @@
     </modules>
     <dependencies>
         <dependency>
-            <groupId>org.processing</groupId>
-            <artifactId>core</artifactId>
-            <version>3.1.1</version>
+            <groupId>net.tangentmc</groupId>
+            <artifactId>ProcessingUtils</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>tangentmc</id>
+            <name>TangentMC Internal Repository</name>
+            <url>https://maven.tangentmc.net/repository/victoria/</url>
+        </repository>
+    </repositories>
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>

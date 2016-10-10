@@ -10,14 +10,12 @@ class Boolet {
     private PVector position;
     private double speed;
     //will need to be int if add more ammo types
-    private boolean explosive;
     private IvanTheRussian game = IvanTheRussian.instance;
     PImage totallyNotBill;
 
     Boolet(float x, float y, double speed, boolean explosive) {
         position=new PVector(x,y);
         this.speed = speed;
-        this.explosive = explosive;
         if(speed>=0)totallyNotBill =game.loadImage("BooletRight.png");
         else totallyNotBill =game.loadImage("BooletLeft.png");
         totallyNotBill.resize(25,15);
