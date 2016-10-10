@@ -10,10 +10,11 @@ class Boolet {
     private PVector position;
     private double speed;
     //will need to be int if add more ammo types
+    @SuppressWarnings("FieldCanBeLocal")
     private IvanTheRussian game = IvanTheRussian.instance;
     PImage totallyNotBill;
 
-    Boolet(float x, float y, double speed, boolean explosive) {
+    Boolet(float x, float y, double speed) {
         position=new PVector(x,y);
         this.speed = speed;
         if(speed>=0)totallyNotBill =game.loadImage("BooletRight.png");
@@ -28,7 +29,7 @@ class Boolet {
     void move() {
         Blocks x;
         if ((x = IvanTheRussian.instance.checkHit(this)) != null) {
-            if(x.getType().equals("BreakableWall")){
+            if(x.getType().equals("BreakableWall")||x.getType().equals("Mine")){
                 IvanTheRussian.instance.removeObjects(x);
             }
             Ivan.removeBullet(this);

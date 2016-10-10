@@ -11,8 +11,10 @@ class RectCol {
         double rectY = rect.getPos().y;
         double ivanX = ivan.getPosition().x;
         double ivanY = ivan.getPosition().y;
-        if (!rect.isSolid())return null;
-        if (ivanX + size > rectX && ivanX < rectX + size && ivanY + size *2 > rectY && ivanY < rectY + size) {
+        if (!rect.getType().equals("Mine")||!rect.getType().equals("Flag")) {
+            if (!rect.isSolid()) return null;
+        }
+        if (ivanX + size > rectX && ivanX < rectX + size && ivanY + size * 2 > rectY && ivanY < rectY + size) {
             return rect;
         }
         return null;
@@ -24,7 +26,7 @@ class RectCol {
         double rectY = rect.getPos().y;
         double BooletX = bullet.getPosition().x;
         double BooletY = bullet.getPosition().y;
-        if (!rect.isSolid())return null;
+        if (!rect.isSolid()) return null;
         if (BooletX + size * 2 > rectX && BooletX < rectX + size && BooletY + size > rectY && BooletY < rectY + size) {
             return rect;
         }

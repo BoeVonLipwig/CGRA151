@@ -12,19 +12,17 @@ class Ivan {
 
     private PVector position, acceleration;
     private int size = IvanTheRussian.size, ivanHeight = size * 2, width = size * 2, health = 10, count = 0;
-    private boolean hasExplosive, dead = false;
-    private boolean ammoType, spriteChanger;
+    private boolean spriteChanger, dead = false;
     private static ArrayList<Boolet> bullets;
     private PImage ivan;
     private PImage[] ivanImages = new PImage[4];
-    private int frameCountOld=IvanTheRussian.instance.frameCount;
+    private int frameCountOld = IvanTheRussian.instance.frameCount;
 
-    Ivan(PVector position, boolean hasExplosive) {
+    Ivan(PVector position) {
         this.position = position;
         acceleration = new PVector(0, 0);
         bullets = new ArrayList<>();
         IvanTheRussian game = IvanTheRussian.instance;
-        this.hasExplosive = hasExplosive;
         ivanImages[0] = game.loadImage("IvanRight.png");
         ivanImages[1] = game.loadImage("IvanLeft.png");
         ivanImages[2] = game.loadImage("IvanRunningRight.png");
@@ -54,11 +52,6 @@ class Ivan {
             boolean[] keys = IvanTheRussian.getKeys();
             double grav = 0.4;
             acceleration.y += grav;
-//            if (position.y > 600 - ivanHeight) {
-//                acceleration.y = 0;
-//                position.y = 600 - ivanHeight;
-//                jumpAllowed = true;
-//            }
             if (keys[0] && jumpAllowed) {
                 acceleration.y -= 10;
                 keys[0] = false;
@@ -89,13 +82,14 @@ class Ivan {
             Blocks x;
             if ((x = IvanTheRussian.instance.checkCollide()) != null) {
                 if (x.getType().equals("Flag")) {
-                    IvanTheRussian.instance.WIN(x);
+                    IvanTheRussian.instance.WIN();
                 }
             }
             position.x += acceleration.x;
-            if ((x = IvanTheRussian.instance.checkCollide()) != null/*&&!x.isSolid()*/) {
+            if ((x = IvanTheRussian.instance.checkCollide()) != null) {
                 if (x.isDoesDMG()) {
                     position = IvanTheRussian.instance.startPoint;
+
                     takeDmg(1);
                 }
                 if (acceleration.x > 0) {
@@ -105,9 +99,9 @@ class Ivan {
                 }
             }
             position.y += acceleration.y;
-            if ((x = IvanTheRussian.instance.checkCollide()) != null/*&&!x.isSolid()*/) {
+            if ((x = IvanTheRussian.instance.checkCollide()) != null) {
                 if (x.isDoesDMG()) {
-                    position = IvanTheRussian.instance.startPoint;
+                    position = IvanTheRussian.instance.startPoint.copy();
                     takeDmg(1);
                 }
                 if (x.isSolid()) {
@@ -140,7 +134,7 @@ class Ivan {
         return false;
     }
 
-    private void takeDmg(int amount) {
+    void takeDmg(int amount) {
         health -= amount;
         if (health > 10) health = 10;
     }
@@ -153,13 +147,6 @@ class Ivan {
         takeDmg(-amount);
     }
 
-    void cycleAmmo() {
-        if (hasExplosive) {
-            ammoType = !ammoType;
-        }
-
-    }
-
     int getHealth() {
         return health;
     }
@@ -169,12 +156,12 @@ class Ivan {
     }
 
     void shoot() {
-        if(IvanTheRussian.instance.frameCount-frameCountOld>(IvanTheRussian.instance.frameRate/3)*2) {
+        if (IvanTheRussian.instance.frameCount - frameCountOld > (IvanTheRussian.instance.frameRate / 3) * 2) {
             double speed = 10;
             if (!facingRight()) speed = -10;
-            Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
+            Boolet cur = new Boolet(position.x, position.y, speed);
             bullets.add(cur);
-            frameCountOld=IvanTheRussian.instance.frameCount;
+            frameCountOld = IvanTheRussian.instance.frameCount;
         }
     }
 
