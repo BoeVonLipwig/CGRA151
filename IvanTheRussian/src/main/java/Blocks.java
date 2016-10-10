@@ -12,22 +12,16 @@ class Blocks {
     private String type;
     private boolean doesDMG;
     private boolean solid;
-    private int index;
 
-    Blocks(PVector pos, String type, int index) {
+    Blocks(PVector pos, String type) {
         this.pos = pos;
         this.type = type;
-        this.index=index;
         setTypes();
     }
 
     private void setTypes(){
         doesDMG = Objects.equals(type, "Spike") || Objects.equals(type, "Mine");
         solid = !(type.equals("Mine") || type.equals("FakeEarth") || type.equals("FakeBarrenEarth") || type.equals("FakeWall")||type.equals("Flag"));
-    }
-
-    int getIndex(){
-        return index;
     }
 
     boolean isSolid() {

@@ -42,10 +42,9 @@ public class IvanTheRussian extends PApplet {
     private PImage GloriousMotherRussia;
     //nonSolid blocks
     //I know they have the same sprite but this makes it easier to understand
+    private PImage FakeWall;
     private PImage FakeEarth;
-    //unused yet
-//    private PImage FakeWall;
-//    private PImage FakeBarrenEarth;
+    private PImage FakeBarrenEarth;
     private boolean blip;
     PVector startPoint;
     private int mineChanger = 0;
@@ -74,9 +73,9 @@ public class IvanTheRussian extends PApplet {
         images.add(Spike = loadImage("Spikes.png"));
         images.add(MineOn = loadImage("MineOn.png"));
         images.add(MineOff = loadImage("MineOff.png"));
-//        images.add(FakeWall = loadImage("FakeWall.png"));
+        images.add(FakeWall = loadImage("FakeWall.png"));
         images.add(FakeEarth = loadImage("FakeEarth.png"));
-//        images.add(FakeBarrenEarth=loadImage("FakeBarrenEarth.png"));
+        images.add(FakeBarrenEarth=loadImage("FakeBarrenEarth.png"));
         for (PImage image : images) {
             image.resize(size, size);
         }for (PImage image : images2) {
@@ -90,8 +89,9 @@ public class IvanTheRussian extends PApplet {
     }
 
     public void settings() {
-        size(1200, 600);
+        fullScreen();
     }
+
 
     public void draw() {
         pushMatrix();
@@ -112,8 +112,14 @@ public class IvanTheRussian extends PApplet {
                 case "BarrenEarth":
                     image(BarrenEarth, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
+                case "FakeBarrenEarth":
+                    image(FakeBarrenEarth, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
+                    break;
                 case "Wall":
                     image(Wall, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
+                    break;
+                case "FakeWall":
+                    image(FakeWall, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
                     break;
                 case "Spike":
                     image(Spike, temp.getPos().x - size / 2, temp.getPos().y + size / 2);
@@ -149,33 +155,33 @@ public class IvanTheRussian extends PApplet {
 
     private void drawBoolet(){
         ArrayList<Boolet> boolets = Ivan.getBullets();
-        for (int i = 0; i < boolets.size(); i++) {
-            image(boolets.get(i).totallyNotBill,boolets.get(i).getPosition().x,boolets.get(i).getPosition().y+10);
-            boolets.get(i).move();
+        for (Boolet boolet : new ArrayList<>(boolets)) {
+            image(boolet.totallyNotBill, boolet.getPosition().x+20, boolet.getPosition().y + 10);
+            boolet.move();
         }
     }
 
-    void removeObjects(int index){
-        objects.remove(index);
+    void removeObjects(Blocks block){
+        objects.remove(block);
     }
 
     private void displayHealth() {
-        int hSize = 20;
+        int heartSize = 20;
         PImage Empty = loadImage("EmptyHeart.png");
         PImage Half = loadImage("HalfHeart.png");
         PImage Full = loadImage("FullHeart.png");
-        Empty.resize(hSize, hSize);
-        Half.resize(hSize, hSize);
-        Full.resize(hSize, hSize);
+        Empty.resize(heartSize, heartSize);
+        Half.resize(heartSize, heartSize);
+        Full.resize(heartSize, heartSize);
         int health = ivan.getHealth();
         if (health <= 0) ivan.die();
         for (int i = 0; i < 5; i++, health--) {
             if (health > 1) {
-                image(Full, hSize + (i * hSize), hSize);
+                image(Full, heartSize + (i * heartSize), heartSize);
             } else if (health > 0) {
-                image(Half, hSize + (i * hSize), hSize);
+                image(Half, heartSize + (i * heartSize), heartSize);
             } else {
-                image(Empty, hSize + (i * hSize), hSize);
+                image(Empty, heartSize + (i * heartSize), heartSize);
             }
         }
     }
@@ -256,6 +262,7 @@ public class IvanTheRussian extends PApplet {
             case 0:
                 objects.addAll(readLevel("test.png"));
                 break;
+            //tut level
             case 1:
                 objects.clear();
                 objects.addAll(readLevel("level1.png"));
@@ -292,23 +299,23 @@ public class IvanTheRussian extends PApplet {
                     x++;
                     //dint use color names because my ide puts the colors in the margin for me which makes it easier to see
                     if (color.equals(new Color(0,0,0))) {
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Wall",toReturn.size()));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Wall"));
                     }else if(color.equals(new Color(255,0,0))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Mine",toReturn.size()));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Mine"));
                     }else if(color.equals(new Color(0,255,0))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Earth",toReturn.size()));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Earth"));
                     }else if(color.equals(new Color(130,127,0))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BarrenEarth",toReturn.size()));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BarrenEarth"));
                     }else if(color.equals(new Color(76,76,76))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Spike",toReturn.size()));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Spike"));
                     }else if(color.equals(new Color(0,0,255))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "FakeEarth",toReturn.size()));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "FakeWall"));
                     }else if(color.equals(new Color(255,255,23))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Flag",toReturn.size()));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "Flag"));
                     }else if(color.equals(new Color(23,255,83))){
-                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BreakableWall",toReturn.size()));
+                        toReturn.add(new Blocks(new PVector(size * x, size * y), "BreakableWall"));
                     }else if(color.equals(new Color(127,0,127))){
-                        startPoint=new PVector(x,y);
+                        ivan.setPos(startPoint=new PVector(x,y));
                     }
                     x--;
                 }

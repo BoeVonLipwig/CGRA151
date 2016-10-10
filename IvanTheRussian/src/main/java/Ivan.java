@@ -145,8 +145,8 @@ class Ivan {
         else if (health > 10) health = 10;
     }
 
-    void setPos(int x, int y) {
-        position = new PVector(x, y);
+    void setPos(PVector set) {
+        position = set;
     }
 
     void heal(int amount) {
@@ -164,17 +164,14 @@ class Ivan {
         return health;
     }
 
-    static void removeBullet(int index) {
-        if (!bullets.isEmpty()) {
-            bullets.remove(index);
-        }
+    static void removeBullet(Boolet c) {
+        bullets.remove(c);
     }
 
     void shoot() {
         double speed = 10;
         if (!facingRight()) speed = -10;
         Boolet cur = new Boolet(position.x, position.y, speed, ammoType);
-        cur.setIndex(bullets.size());
         bullets.add(cur);
     }
 
@@ -182,18 +179,8 @@ class Ivan {
         return position;
     }
 
-//    PVector getAcl() {
-//        return acceleration;
-//    }
-
     PImage getIvan() {
         return ivan;
-    }
-
-    public void booletHit() {
-        for (Boolet boolet : bullets) {
-            IvanTheRussian.instance.checkHit(boolet);
-        }
     }
 
     void die() {
