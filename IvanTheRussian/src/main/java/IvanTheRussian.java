@@ -188,14 +188,19 @@ public class IvanTheRussian extends PApplet {
     }
 
     private void displayHealth() {
+//        heart size
         int heartSize = 20;
+        //heart images
         PImage Empty = loadImage("EmptyHeart.png");
         PImage Half = loadImage("HalfHeart.png");
         PImage Full = loadImage("FullHeart.png");
+        //resizing
         Empty.resize(heartSize, heartSize);
         Half.resize(heartSize, heartSize);
         Full.resize(heartSize, heartSize);
+        //gets ivans health
         int health = ivan.getHealth();
+        ///adds heart types so that there is 5 hearts with differentamountss full
         for (int i = 0; i < 5; i++, health--) {
             if (health > 1) {
                 image(Full, heartSize + (i * heartSize), heartSize);
@@ -209,6 +214,8 @@ public class IvanTheRussian extends PApplet {
     }
 
     public void keyPressed() {
+        //sets array parts to true when key pressed to be read from elsewhere
+        //allows muli key presses at the same time
         //up
         if (key == 'w' || key == 'W') {
             keys[0] = true;
@@ -238,6 +245,7 @@ public class IvanTheRussian extends PApplet {
     }
 
     public void keyReleased() {
+        //sets to false
             if (key == 'w' || key == 'W') {
                 keys[0] = false;
             }
@@ -253,21 +261,24 @@ public class IvanTheRussian extends PApplet {
                 keys[3] = false;
             }
             if (key == 'e' || key == 'E') {
+                //stops holding down key to spam
                 fireAllowed = true;
             }
 
     }
 
     Blocks checkHit(Boolet boolet) {
-        Blocks x;
+        //loops over all objects and returns the block the boolet collides with
         for (Blocks object : objects) {
-            x = RectCol.collisionBoolet(boolet, object);
+            Blocks x = RectCol.collisionBoolet(boolet, object);
             if (x != null) return x;
         }
+        //if no colide occurs
         return null;
     }
 
     Blocks checkCollide() {
+        ///same as above but for ivan
         Blocks x;
         for (Blocks object : objects) {
             x = RectCol.collisionIvan(ivan, object);
@@ -281,10 +292,13 @@ public class IvanTheRussian extends PApplet {
     }
 
     private void loadLevel() {
+        //heals ivan
         ivan.heal(10);
+        // clears the objects array the adds all objects for level to it
         switch (level) {
             //test stuff
             case 0:
+                objects.clear();
                 objects.addAll(readLevel("test.png"));
                 break;
             //tut level
@@ -295,6 +309,14 @@ public class IvanTheRussian extends PApplet {
             case 2:
                 objects.clear();
                 objects.addAll(readLevel("level2.png"));
+                break;
+            case 3:
+                objects.clear();
+                objects.addAll(readLevel("level3.png"));
+                break;
+            case 4:
+                objects.clear();
+                image(loadImage("Credits.png"),0,40);
                 break;
 
         }
@@ -348,15 +370,19 @@ public class IvanTheRussian extends PApplet {
     }
 
     private void death() {
+        //clears objects
         objects.clear();
+        //shows death screen
         image(loadImage("Death.png"),0,40);
     }
 
     void WIN() {
+        //cycles through flag types
         for (int i = 0; i < flags.size(); i++) {
             flagIndex++;
             draw();
         }
+        //goes to next level
         level++;
         loadLevel();
     }
